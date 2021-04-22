@@ -1,0 +1,702 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		2342C784324F407DA9CFD332 /* ZERO_CHECK */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = EAD5E68C73AC4597B708C0FE /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */;
+			buildPhases = (
+				6D51C9C6F0151E334FD7C8D5 /* Generate CMakeFiles/ZERO_CHECK */,
+			);
+			dependencies = (
+			);
+			name = ZERO_CHECK;
+			productName = ZERO_CHECK;
+		};
+		E8393418850C4795BA5E5CDB /* ALL_BUILD */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = A7E99B2D8CD04C74B0BA80F8 /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */;
+			buildPhases = (
+				FCC2CFF7BE279BF2E8A71D27 /* Generate CMakeFiles/ALL_BUILD */,
+			);
+			dependencies = (
+				22E40C1A39EA41BCA7B9D1E6 /* PBXTargetDependency */,
+				196103572BBB4DDBAEF088AA /* PBXTargetDependency */,
+			);
+			name = ALL_BUILD;
+			productName = ALL_BUILD;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		93648882294743D1BA6175A9 /* /usr/local/Cellar/opencv/4.5.1/lib/cmake/opencv4/example.cpp */ = {isa = PBXBuildFile; fileRef = 42FC9D901BBF4099B0B08E3C /* /usr/local/Cellar/opencv/4.5.1/lib/cmake/opencv4/example.cpp */; };
+		DCE322C8761245D5900BA98B /* /Users/chriskreienkamp/DGM/CMakeLists.txt */ = {isa = PBXBuildFile; fileRef = 0827C32D649443BC8EF2DDAF /* /Users/chriskreienkamp/DGM/CMakeLists.txt */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXBuildStyle section */
+		2846B3C557FF490C8740F838 /* Release */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = Release;
+		};
+		46286845BAD14B8296104CA2 /* MinSizeRel */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = MinSizeRel;
+		};
+		6F778F667B534E039E4101AA /* RelWithDebInfo */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = RelWithDebInfo;
+		};
+		721EDDCD63934F56B7BC9315 /* Debug */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = Debug;
+		};
+/* End PBXBuildStyle section */
+
+/* Begin PBXContainerItemProxy section */
+		6DE7FF033E084F3987A662F2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 07D92F905C8E42179B31643E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3FB5C7374397462AB2A0F14A;
+			remoteInfo = opencv_example;
+		};
+		AB5115F465FB44BB9A687BC4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 07D92F905C8E42179B31643E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2342C784324F407DA9CFD332;
+			remoteInfo = ZERO_CHECK;
+		};
+		ED36BBD9FE51472E8D8BB118 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 07D92F905C8E42179B31643E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2342C784324F407DA9CFD332;
+			remoteInfo = ZERO_CHECK;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0827C32D649443BC8EF2DDAF /* /Users/chriskreienkamp/DGM/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		42FC9D901BBF4099B0B08E3C /* /usr/local/Cellar/opencv/4.5.1/lib/cmake/opencv4/example.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = example.cpp; path = ../../../usr/local/Cellar/opencv/4.5.1/lib/cmake/opencv4/example.cpp; sourceTree = SOURCE_ROOT; };
+		B84ACDCFE4574584B4A22BE2 /* /Users/chriskreienkamp/DGM/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		F02DF7D615674972A714C9FE /* opencv_example */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = opencv_example; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E5B09B7409DD4EBEBD0C2E51 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1A0C098EC45E47E5872A8FC7 = {
+			isa = PBXGroup;
+			children = (
+				ACBE657A2C6847C2A3A8C505 /* opencv_example */,
+				60B4DCFCBA8043BBB3482B7E /* ALL_BUILD */,
+				E6572EE1BF01451896BE3156 /* Products */,
+				FB0B762AF4984D0FB9382A92 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		1E4D3D573F5C45849CDF26DD /* CMake Rules */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "CMake Rules";
+			sourceTree = "<group>";
+		};
+		60B4DCFCBA8043BBB3482B7E /* ALL_BUILD */ = {
+			isa = PBXGroup;
+			children = (
+				1E4D3D573F5C45849CDF26DD /* CMake Rules */,
+				B84ACDCFE4574584B4A22BE2 /* /Users/chriskreienkamp/DGM/CMakeLists.txt */,
+			);
+			name = ALL_BUILD;
+			sourceTree = "<group>";
+		};
+		93D01B6DB05143B38B830822 /* Source Files */ = {
+			isa = PBXGroup;
+			children = (
+				42FC9D901BBF4099B0B08E3C /* /usr/local/Cellar/opencv/4.5.1/lib/cmake/opencv4/example.cpp */,
+			);
+			name = "Source Files";
+			sourceTree = "<group>";
+		};
+		ACBE657A2C6847C2A3A8C505 /* opencv_example */ = {
+			isa = PBXGroup;
+			children = (
+				93D01B6DB05143B38B830822 /* Source Files */,
+				0827C32D649443BC8EF2DDAF /* /Users/chriskreienkamp/DGM/CMakeLists.txt */,
+			);
+			name = opencv_example;
+			sourceTree = "<group>";
+		};
+		E6572EE1BF01451896BE3156 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F02DF7D615674972A714C9FE /* opencv_example */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FB0B762AF4984D0FB9382A92 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		3FB5C7374397462AB2A0F14A /* opencv_example */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B44E23F5EFA448DFAC20DA65 /* Build configuration list for PBXNativeTarget "opencv_example" */;
+			buildPhases = (
+				CA01E2D72D934E82B0B8B8F6 /* Sources */,
+				E5B09B7409DD4EBEBD0C2E51 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				379B07B333F24783996AEE0A /* PBXTargetDependency */,
+			);
+			name = opencv_example;
+			productName = opencv_example;
+			productReference = F02DF7D615674972A714C9FE /* opencv_example */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		07D92F905C8E42179B31643E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1230;
+			};
+			buildConfigurationList = F61BEA14F0AA494193165020 /* Build configuration list for PBXProject "opencv_example_project" */;
+			buildSettings = {
+			};
+			buildStyles = (
+				721EDDCD63934F56B7BC9315 /* Debug */,
+				2846B3C557FF490C8740F838 /* Release */,
+				46286845BAD14B8296104CA2 /* MinSizeRel */,
+				6F778F667B534E039E4101AA /* RelWithDebInfo */,
+			);
+			compatibilityVersion = "Xcode 3.2";
+			hasScannedForEncodings = 0;
+			mainGroup = 1A0C098EC45E47E5872A8FC7;
+			projectDirPath = /Users/chriskreienkamp/DGM;
+			projectRoot = "";
+			targets = (
+				E8393418850C4795BA5E5CDB /* ALL_BUILD */,
+				2342C784324F407DA9CFD332 /* ZERO_CHECK */,
+				3FB5C7374397462AB2A0F14A /* opencv_example */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3C0110FC8322DE7E50886E21 = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# shell script goes here
+exit 0";
+			showEnvVarsInLog = 0;
+		};
+		6D51C9C6F0151E334FD7C8D5 /* Generate CMakeFiles/ZERO_CHECK */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Generate CMakeFiles/ZERO_CHECK";
+			outputPaths = (
+"/Users/chriskreienkamp/OpenCV-C++/WaterPoloApp/WaterPoloApp/CMakeFiles/ZERO_CHECK"			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e
+if test \"$CONFIGURATION\" = \"Debug\"; then :
+  cd /Users/chriskreienkamp/OpenCV-C++/WaterPoloApp/WaterPoloApp
+  make -f /Users/chriskreienkamp/OpenCV-C++/WaterPoloApp/WaterPoloApp/CMakeScripts/ReRunCMake.make
+fi
+if test \"$CONFIGURATION\" = \"Release\"; then :
+  cd /Users/chriskreienkamp/OpenCV-C++/WaterPoloApp/WaterPoloApp
+  make -f /Users/chriskreienkamp/OpenCV-C++/WaterPoloApp/WaterPoloApp/CMakeScripts/ReRunCMake.make
+fi
+if test \"$CONFIGURATION\" = \"MinSizeRel\"; then :
+  cd /Users/chriskreienkamp/OpenCV-C++/WaterPoloApp/WaterPoloApp
+  make -f /Users/chriskreienkamp/OpenCV-C++/WaterPoloApp/WaterPoloApp/CMakeScripts/ReRunCMake.make
+fi
+if test \"$CONFIGURATION\" = \"RelWithDebInfo\"; then :
+  cd /Users/chriskreienkamp/OpenCV-C++/WaterPoloApp/WaterPoloApp
+  make -f /Users/chriskreienkamp/OpenCV-C++/WaterPoloApp/WaterPoloApp/CMakeScripts/ReRunCMake.make
+fi
+";
+			showEnvVarsInLog = 0;
+		};
+		9B50530E35CC49C82C2FACCF = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# shell script goes here
+exit 0";
+			showEnvVarsInLog = 0;
+		};
+		FCC2CFF7BE279BF2E8A71D27 /* Generate CMakeFiles/ALL_BUILD */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Generate CMakeFiles/ALL_BUILD";
+			outputPaths = (
+"/Users/chriskreienkamp/OpenCV-C++/WaterPoloApp/WaterPoloApp/CMakeFiles/ALL_BUILD"			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e
+if test \"$CONFIGURATION\" = \"Debug\"; then :
+  cd /Users/chriskreienkamp/OpenCV-C++/WaterPoloApp/WaterPoloApp
+  echo Build\\ all\\ projects
+fi
+if test \"$CONFIGURATION\" = \"Release\"; then :
+  cd /Users/chriskreienkamp/OpenCV-C++/WaterPoloApp/WaterPoloApp
+  echo Build\\ all\\ projects
+fi
+if test \"$CONFIGURATION\" = \"MinSizeRel\"; then :
+  cd /Users/chriskreienkamp/OpenCV-C++/WaterPoloApp/WaterPoloApp
+  echo Build\\ all\\ projects
+fi
+if test \"$CONFIGURATION\" = \"RelWithDebInfo\"; then :
+  cd /Users/chriskreienkamp/OpenCV-C++/WaterPoloApp/WaterPoloApp
+  echo Build\\ all\\ projects
+fi
+";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CA01E2D72D934E82B0B8B8F6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				93648882294743D1BA6175A9 /* /usr/local/Cellar/opencv/4.5.1/lib/cmake/opencv4/example.cpp */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		196103572BBB4DDBAEF088AA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2342C784324F407DA9CFD332 /* ZERO_CHECK */;
+			targetProxy = AB5115F465FB44BB9A687BC4 /* PBXContainerItemProxy */;
+		};
+		22E40C1A39EA41BCA7B9D1E6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3FB5C7374397462AB2A0F14A /* opencv_example */;
+			targetProxy = 6DE7FF033E084F3987A662F2 /* PBXContainerItemProxy */;
+		};
+		379B07B333F24783996AEE0A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2342C784324F407DA9CFD332 /* ZERO_CHECK */;
+			targetProxy = ED36BBD9FE51472E8D8BB118 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		11FD5453413344B794AD7D43 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/chriskreienkamp/OpenCV-C++/WaterPoloApp/WaterPoloApp";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = RelWithDebInfo;
+		};
+		173FBA7F16EA4009BD397E6B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",CERES_FOUND);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				LD_RUNPATH_SEARCH_PATHS = (/usr/local/lib,"$(inherited)");
+				OTHER_CPLUSPLUSFLAGS = "    -DNDEBUG '-std=gnu++11' ";
+				OTHER_LDFLAGS = (" -Wl,-search_paths_first -Wl,-headerpad_max_install_names",/usr/local/lib/libopencv_gapi.4.5.1.dylib,/usr/local/lib/libopencv_stitching.4.5.1.dylib,/usr/local/lib/libopencv_alphamat.4.5.1.dylib,/usr/local/lib/libopencv_aruco.4.5.1.dylib,/usr/local/lib/libopencv_bgsegm.4.5.1.dylib,/usr/local/lib/libopencv_bioinspired.4.5.1.dylib,/usr/local/lib/libopencv_ccalib.4.5.1.dylib,/usr/local/lib/libopencv_dnn_objdetect.4.5.1.dylib,/usr/local/lib/libopencv_dnn_superres.4.5.1.dylib,/usr/local/lib/libopencv_dpm.4.5.1.dylib,/usr/local/lib/libopencv_face.4.5.1.dylib,/usr/local/lib/libopencv_freetype.4.5.1.dylib,/usr/local/lib/libopencv_fuzzy.4.5.1.dylib,/usr/local/lib/libopencv_hfs.4.5.1.dylib,/usr/local/lib/libopencv_img_hash.4.5.1.dylib,/usr/local/lib/libopencv_intensity_transform.4.5.1.dylib,/usr/local/lib/libopencv_line_descriptor.4.5.1.dylib,/usr/local/lib/libopencv_mcc.4.5.1.dylib,/usr/local/lib/libopencv_quality.4.5.1.dylib,/usr/local/lib/libopencv_rapid.4.5.1.dylib,/usr/local/lib/libopencv_reg.4.5.1.dylib,/usr/local/lib/libopencv_rgbd.4.5.1.dylib,/usr/local/lib/libopencv_saliency.4.5.1.dylib,/usr/local/lib/libopencv_sfm.4.5.1.dylib,/usr/local/lib/libopencv_stereo.4.5.1.dylib,/usr/local/lib/libopencv_structured_light.4.5.1.dylib,/usr/local/lib/libopencv_superres.4.5.1.dylib,/usr/local/lib/libopencv_surface_matching.4.5.1.dylib,/usr/local/lib/libopencv_tracking.4.5.1.dylib,/usr/local/lib/libopencv_videostab.4.5.1.dylib,/usr/local/lib/libopencv_viz.4.5.1.dylib,/usr/local/lib/libopencv_xfeatures2d.4.5.1.dylib,/usr/local/lib/libopencv_xobjdetect.4.5.1.dylib,/usr/local/lib/libopencv_xphoto.4.5.1.dylib,/usr/local/lib/libopencv_shape.4.5.1.dylib,/usr/local/lib/libopencv_highgui.4.5.1.dylib,/usr/local/lib/libopencv_datasets.4.5.1.dylib,/usr/local/lib/libopencv_plot.4.5.1.dylib,/usr/local/lib/libopencv_text.4.5.1.dylib,/usr/local/lib/libopencv_ml.4.5.1.dylib,/usr/local/lib/libopencv_phase_unwrapping.4.5.1.dylib,/usr/local/lib/libopencv_optflow.4.5.1.dylib,/usr/local/lib/libopencv_ximgproc.4.5.1.dylib,/usr/local/lib/libopencv_video.4.5.1.dylib,/usr/local/lib/libopencv_dnn.4.5.1.dylib,/usr/local/lib/libopencv_videoio.4.5.1.dylib,/usr/local/lib/libopencv_imgcodecs.4.5.1.dylib,/usr/local/lib/libopencv_objdetect.4.5.1.dylib,/usr/local/lib/libopencv_calib3d.4.5.1.dylib,/usr/local/lib/libopencv_features2d.4.5.1.dylib,/usr/local/lib/libopencv_flann.4.5.1.dylib,/usr/local/lib/libopencv_photo.4.5.1.dylib,/usr/local/lib/libopencv_imgproc.4.5.1.dylib,/usr/local/lib/libopencv_core.4.5.1.dylib);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = opencv_example;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/chriskreienkamp/OpenCV-C++/WaterPoloApp/WaterPoloApp";
+				SYSTEM_HEADER_SEARCH_PATHS = (/usr/local/Cellar/opencv/4.5.1/include/opencv4,"$(inherited)");
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Release;
+		};
+		26A0F1A27BA04245BAE048E9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/chriskreienkamp/OpenCV-C++/WaterPoloApp/WaterPoloApp";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Debug;
+		};
+		2BC1990E76F144AA888EFB25 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/chriskreienkamp/OpenCV-C++/WaterPoloApp/WaterPoloApp";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = MinSizeRel;
+		};
+		31755481E50743A48127B8DA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/chriskreienkamp/OpenCV-C++/WaterPoloApp/WaterPoloApp";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Release;
+		};
+		47832378F53B44FDA587246C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk;
+				SYMROOT = "/Users/chriskreienkamp/OpenCV-C++/WaterPoloApp/WaterPoloApp/build";
+			};
+			name = Debug;
+		};
+		7AE1E7281B664EBCA0D74114 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk;
+				SYMROOT = "/Users/chriskreienkamp/OpenCV-C++/WaterPoloApp/WaterPoloApp/build";
+			};
+			name = RelWithDebInfo;
+		};
+		8081CC45FC214D9484A99F7D /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk;
+				SYMROOT = "/Users/chriskreienkamp/OpenCV-C++/WaterPoloApp/WaterPoloApp/build";
+			};
+			name = MinSizeRel;
+		};
+		8CC9D4CD8A6B42CE9AEB705E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk;
+				SYMROOT = "/Users/chriskreienkamp/OpenCV-C++/WaterPoloApp/WaterPoloApp/build";
+			};
+			name = Release;
+		};
+		95FA1CF6E4674777B240810F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",CERES_FOUND);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				LD_RUNPATH_SEARCH_PATHS = (/usr/local/lib,"$(inherited)");
+				OTHER_CPLUSPLUSFLAGS = "   '-std=gnu++11' ";
+				OTHER_LDFLAGS = (" -Wl,-search_paths_first -Wl,-headerpad_max_install_names",/usr/local/lib/libopencv_gapi.4.5.1.dylib,/usr/local/lib/libopencv_stitching.4.5.1.dylib,/usr/local/lib/libopencv_alphamat.4.5.1.dylib,/usr/local/lib/libopencv_aruco.4.5.1.dylib,/usr/local/lib/libopencv_bgsegm.4.5.1.dylib,/usr/local/lib/libopencv_bioinspired.4.5.1.dylib,/usr/local/lib/libopencv_ccalib.4.5.1.dylib,/usr/local/lib/libopencv_dnn_objdetect.4.5.1.dylib,/usr/local/lib/libopencv_dnn_superres.4.5.1.dylib,/usr/local/lib/libopencv_dpm.4.5.1.dylib,/usr/local/lib/libopencv_face.4.5.1.dylib,/usr/local/lib/libopencv_freetype.4.5.1.dylib,/usr/local/lib/libopencv_fuzzy.4.5.1.dylib,/usr/local/lib/libopencv_hfs.4.5.1.dylib,/usr/local/lib/libopencv_img_hash.4.5.1.dylib,/usr/local/lib/libopencv_intensity_transform.4.5.1.dylib,/usr/local/lib/libopencv_line_descriptor.4.5.1.dylib,/usr/local/lib/libopencv_mcc.4.5.1.dylib,/usr/local/lib/libopencv_quality.4.5.1.dylib,/usr/local/lib/libopencv_rapid.4.5.1.dylib,/usr/local/lib/libopencv_reg.4.5.1.dylib,/usr/local/lib/libopencv_rgbd.4.5.1.dylib,/usr/local/lib/libopencv_saliency.4.5.1.dylib,/usr/local/lib/libopencv_sfm.4.5.1.dylib,/usr/local/lib/libopencv_stereo.4.5.1.dylib,/usr/local/lib/libopencv_structured_light.4.5.1.dylib,/usr/local/lib/libopencv_superres.4.5.1.dylib,/usr/local/lib/libopencv_surface_matching.4.5.1.dylib,/usr/local/lib/libopencv_tracking.4.5.1.dylib,/usr/local/lib/libopencv_videostab.4.5.1.dylib,/usr/local/lib/libopencv_viz.4.5.1.dylib,/usr/local/lib/libopencv_xfeatures2d.4.5.1.dylib,/usr/local/lib/libopencv_xobjdetect.4.5.1.dylib,/usr/local/lib/libopencv_xphoto.4.5.1.dylib,/usr/local/lib/libopencv_shape.4.5.1.dylib,/usr/local/lib/libopencv_highgui.4.5.1.dylib,/usr/local/lib/libopencv_datasets.4.5.1.dylib,/usr/local/lib/libopencv_plot.4.5.1.dylib,/usr/local/lib/libopencv_text.4.5.1.dylib,/usr/local/lib/libopencv_ml.4.5.1.dylib,/usr/local/lib/libopencv_phase_unwrapping.4.5.1.dylib,/usr/local/lib/libopencv_optflow.4.5.1.dylib,/usr/local/lib/libopencv_ximgproc.4.5.1.dylib,/usr/local/lib/libopencv_video.4.5.1.dylib,/usr/local/lib/libopencv_dnn.4.5.1.dylib,/usr/local/lib/libopencv_videoio.4.5.1.dylib,/usr/local/lib/libopencv_imgcodecs.4.5.1.dylib,/usr/local/lib/libopencv_objdetect.4.5.1.dylib,/usr/local/lib/libopencv_calib3d.4.5.1.dylib,/usr/local/lib/libopencv_features2d.4.5.1.dylib,/usr/local/lib/libopencv_flann.4.5.1.dylib,/usr/local/lib/libopencv_photo.4.5.1.dylib,/usr/local/lib/libopencv_imgproc.4.5.1.dylib,/usr/local/lib/libopencv_core.4.5.1.dylib);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = opencv_example;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/chriskreienkamp/OpenCV-C++/WaterPoloApp/WaterPoloApp";
+				SYSTEM_HEADER_SEARCH_PATHS = (/usr/local/Cellar/opencv/4.5.1/include/opencv4,"$(inherited)");
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Debug;
+		};
+		A9B4063E233F41F087181DF7 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",CERES_FOUND);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				LD_RUNPATH_SEARCH_PATHS = (/usr/local/lib,"$(inherited)");
+				OTHER_CPLUSPLUSFLAGS = "    -DNDEBUG '-std=gnu++11' ";
+				OTHER_LDFLAGS = (" -Wl,-search_paths_first -Wl,-headerpad_max_install_names",/usr/local/lib/libopencv_gapi.4.5.1.dylib,/usr/local/lib/libopencv_stitching.4.5.1.dylib,/usr/local/lib/libopencv_alphamat.4.5.1.dylib,/usr/local/lib/libopencv_aruco.4.5.1.dylib,/usr/local/lib/libopencv_bgsegm.4.5.1.dylib,/usr/local/lib/libopencv_bioinspired.4.5.1.dylib,/usr/local/lib/libopencv_ccalib.4.5.1.dylib,/usr/local/lib/libopencv_dnn_objdetect.4.5.1.dylib,/usr/local/lib/libopencv_dnn_superres.4.5.1.dylib,/usr/local/lib/libopencv_dpm.4.5.1.dylib,/usr/local/lib/libopencv_face.4.5.1.dylib,/usr/local/lib/libopencv_freetype.4.5.1.dylib,/usr/local/lib/libopencv_fuzzy.4.5.1.dylib,/usr/local/lib/libopencv_hfs.4.5.1.dylib,/usr/local/lib/libopencv_img_hash.4.5.1.dylib,/usr/local/lib/libopencv_intensity_transform.4.5.1.dylib,/usr/local/lib/libopencv_line_descriptor.4.5.1.dylib,/usr/local/lib/libopencv_mcc.4.5.1.dylib,/usr/local/lib/libopencv_quality.4.5.1.dylib,/usr/local/lib/libopencv_rapid.4.5.1.dylib,/usr/local/lib/libopencv_reg.4.5.1.dylib,/usr/local/lib/libopencv_rgbd.4.5.1.dylib,/usr/local/lib/libopencv_saliency.4.5.1.dylib,/usr/local/lib/libopencv_sfm.4.5.1.dylib,/usr/local/lib/libopencv_stereo.4.5.1.dylib,/usr/local/lib/libopencv_structured_light.4.5.1.dylib,/usr/local/lib/libopencv_superres.4.5.1.dylib,/usr/local/lib/libopencv_surface_matching.4.5.1.dylib,/usr/local/lib/libopencv_tracking.4.5.1.dylib,/usr/local/lib/libopencv_videostab.4.5.1.dylib,/usr/local/lib/libopencv_viz.4.5.1.dylib,/usr/local/lib/libopencv_xfeatures2d.4.5.1.dylib,/usr/local/lib/libopencv_xobjdetect.4.5.1.dylib,/usr/local/lib/libopencv_xphoto.4.5.1.dylib,/usr/local/lib/libopencv_shape.4.5.1.dylib,/usr/local/lib/libopencv_highgui.4.5.1.dylib,/usr/local/lib/libopencv_datasets.4.5.1.dylib,/usr/local/lib/libopencv_plot.4.5.1.dylib,/usr/local/lib/libopencv_text.4.5.1.dylib,/usr/local/lib/libopencv_ml.4.5.1.dylib,/usr/local/lib/libopencv_phase_unwrapping.4.5.1.dylib,/usr/local/lib/libopencv_optflow.4.5.1.dylib,/usr/local/lib/libopencv_ximgproc.4.5.1.dylib,/usr/local/lib/libopencv_video.4.5.1.dylib,/usr/local/lib/libopencv_dnn.4.5.1.dylib,/usr/local/lib/libopencv_videoio.4.5.1.dylib,/usr/local/lib/libopencv_imgcodecs.4.5.1.dylib,/usr/local/lib/libopencv_objdetect.4.5.1.dylib,/usr/local/lib/libopencv_calib3d.4.5.1.dylib,/usr/local/lib/libopencv_features2d.4.5.1.dylib,/usr/local/lib/libopencv_flann.4.5.1.dylib,/usr/local/lib/libopencv_photo.4.5.1.dylib,/usr/local/lib/libopencv_imgproc.4.5.1.dylib,/usr/local/lib/libopencv_core.4.5.1.dylib);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = opencv_example;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/chriskreienkamp/OpenCV-C++/WaterPoloApp/WaterPoloApp";
+				SYSTEM_HEADER_SEARCH_PATHS = (/usr/local/Cellar/opencv/4.5.1/include/opencv4,"$(inherited)");
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = MinSizeRel;
+		};
+		B2F7A7508A1B4839B5267D96 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/chriskreienkamp/OpenCV-C++/WaterPoloApp/WaterPoloApp";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = RelWithDebInfo;
+		};
+		B5824315D2C84F7D9033CAB0 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",CERES_FOUND);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				LD_RUNPATH_SEARCH_PATHS = (/usr/local/lib,"$(inherited)");
+				OTHER_CPLUSPLUSFLAGS = "       -DNDEBUG '-std=gnu++11' ";
+				OTHER_LDFLAGS = (" -Wl,-search_paths_first -Wl,-headerpad_max_install_names",/usr/local/lib/libopencv_gapi.4.5.1.dylib,/usr/local/lib/libopencv_stitching.4.5.1.dylib,/usr/local/lib/libopencv_alphamat.4.5.1.dylib,/usr/local/lib/libopencv_aruco.4.5.1.dylib,/usr/local/lib/libopencv_bgsegm.4.5.1.dylib,/usr/local/lib/libopencv_bioinspired.4.5.1.dylib,/usr/local/lib/libopencv_ccalib.4.5.1.dylib,/usr/local/lib/libopencv_dnn_objdetect.4.5.1.dylib,/usr/local/lib/libopencv_dnn_superres.4.5.1.dylib,/usr/local/lib/libopencv_dpm.4.5.1.dylib,/usr/local/lib/libopencv_face.4.5.1.dylib,/usr/local/lib/libopencv_freetype.4.5.1.dylib,/usr/local/lib/libopencv_fuzzy.4.5.1.dylib,/usr/local/lib/libopencv_hfs.4.5.1.dylib,/usr/local/lib/libopencv_img_hash.4.5.1.dylib,/usr/local/lib/libopencv_intensity_transform.4.5.1.dylib,/usr/local/lib/libopencv_line_descriptor.4.5.1.dylib,/usr/local/lib/libopencv_mcc.4.5.1.dylib,/usr/local/lib/libopencv_quality.4.5.1.dylib,/usr/local/lib/libopencv_rapid.4.5.1.dylib,/usr/local/lib/libopencv_reg.4.5.1.dylib,/usr/local/lib/libopencv_rgbd.4.5.1.dylib,/usr/local/lib/libopencv_saliency.4.5.1.dylib,/usr/local/lib/libopencv_sfm.4.5.1.dylib,/usr/local/lib/libopencv_stereo.4.5.1.dylib,/usr/local/lib/libopencv_structured_light.4.5.1.dylib,/usr/local/lib/libopencv_superres.4.5.1.dylib,/usr/local/lib/libopencv_surface_matching.4.5.1.dylib,/usr/local/lib/libopencv_tracking.4.5.1.dylib,/usr/local/lib/libopencv_videostab.4.5.1.dylib,/usr/local/lib/libopencv_viz.4.5.1.dylib,/usr/local/lib/libopencv_xfeatures2d.4.5.1.dylib,/usr/local/lib/libopencv_xobjdetect.4.5.1.dylib,/usr/local/lib/libopencv_xphoto.4.5.1.dylib,/usr/local/lib/libopencv_shape.4.5.1.dylib,/usr/local/lib/libopencv_highgui.4.5.1.dylib,/usr/local/lib/libopencv_datasets.4.5.1.dylib,/usr/local/lib/libopencv_plot.4.5.1.dylib,/usr/local/lib/libopencv_text.4.5.1.dylib,/usr/local/lib/libopencv_ml.4.5.1.dylib,/usr/local/lib/libopencv_phase_unwrapping.4.5.1.dylib,/usr/local/lib/libopencv_optflow.4.5.1.dylib,/usr/local/lib/libopencv_ximgproc.4.5.1.dylib,/usr/local/lib/libopencv_video.4.5.1.dylib,/usr/local/lib/libopencv_dnn.4.5.1.dylib,/usr/local/lib/libopencv_videoio.4.5.1.dylib,/usr/local/lib/libopencv_imgcodecs.4.5.1.dylib,/usr/local/lib/libopencv_objdetect.4.5.1.dylib,/usr/local/lib/libopencv_calib3d.4.5.1.dylib,/usr/local/lib/libopencv_features2d.4.5.1.dylib,/usr/local/lib/libopencv_flann.4.5.1.dylib,/usr/local/lib/libopencv_photo.4.5.1.dylib,/usr/local/lib/libopencv_imgproc.4.5.1.dylib,/usr/local/lib/libopencv_core.4.5.1.dylib);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = opencv_example;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/chriskreienkamp/OpenCV-C++/WaterPoloApp/WaterPoloApp";
+				SYSTEM_HEADER_SEARCH_PATHS = (/usr/local/Cellar/opencv/4.5.1/include/opencv4,"$(inherited)");
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = RelWithDebInfo;
+		};
+		C77303CDD7F3428A966D9125 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/chriskreienkamp/OpenCV-C++/WaterPoloApp/WaterPoloApp";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = MinSizeRel;
+		};
+		DDC67CA46DFB4527BA1E3A43 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/chriskreienkamp/OpenCV-C++/WaterPoloApp/WaterPoloApp";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Release;
+		};
+		F5195A208D0945E084CB0C39 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/chriskreienkamp/OpenCV-C++/WaterPoloApp/WaterPoloApp";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A7E99B2D8CD04C74B0BA80F8 /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				26A0F1A27BA04245BAE048E9 /* Debug */,
+				DDC67CA46DFB4527BA1E3A43 /* Release */,
+				C77303CDD7F3428A966D9125 /* MinSizeRel */,
+				11FD5453413344B794AD7D43 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		B44E23F5EFA448DFAC20DA65 /* Build configuration list for PBXNativeTarget "opencv_example" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				95FA1CF6E4674777B240810F /* Debug */,
+				173FBA7F16EA4009BD397E6B /* Release */,
+				A9B4063E233F41F087181DF7 /* MinSizeRel */,
+				B5824315D2C84F7D9033CAB0 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		EAD5E68C73AC4597B708C0FE /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F5195A208D0945E084CB0C39 /* Debug */,
+				31755481E50743A48127B8DA /* Release */,
+				2BC1990E76F144AA888EFB25 /* MinSizeRel */,
+				B2F7A7508A1B4839B5267D96 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		F61BEA14F0AA494193165020 /* Build configuration list for PBXProject "opencv_example_project" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				47832378F53B44FDA587246C /* Debug */,
+				8CC9D4CD8A6B42CE9AEB705E /* Release */,
+				8081CC45FC214D9484A99F7D /* MinSizeRel */,
+				7AE1E7281B664EBCA0D74114 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 07D92F905C8E42179B31643E /* Project object */;
+}
