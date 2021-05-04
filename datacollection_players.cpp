@@ -21,11 +21,12 @@ using namespace cv;
 
 // ### IMPROVEMENTS ###
 // - rather than interpolate on screen, interpolate the animated pool positional data
+// - ballPos - only, not +/-, and include (0/1)
 
 // DATA COLLECTION global variables
 vector<Point2f> awayPlayers;
 vector<Point2f> homePlayers;
-Point2f ball;
+Point2f ballPos;
 vector<bool> waypoints_vector;
 bool accuratePoint;
 
@@ -48,8 +49,13 @@ extern int frame_count;
 
 vector<Point2f> corners;
 
+vector<Point2f> opticalFlowTrackPointsP;
+Mat cam_grayP;
+Mat old_grayP;
+vector<Point2f> new_opticalFlowTrackPointsP;
 
-void datacollection_players() {
+
+void datacollection_players(string path) {
     //?? PUT BACK IN THE GLOBAL AREA
     inputState = "";
     frameState = "R";
@@ -67,24 +73,23 @@ void datacollection_players() {
     bool finalRun = false;
     
     // prepare video for frame-by-frame input with the callback function and read in the first frame
-    string path = "Resources/LindberghPool/video.mp4";
     VideoCapture cap;
-    cap.open(path);
+    cap.open(path+"video.mp4");
     cap.read(cam);
     namedWindow("Camera");
     setMouseCallback("Camera", CallBackFunc_DATACOLLECTION_PLAYERS);
-    possibleInputStates = {"away +", "home +", "away move", "home move", "ball move", "away -", "home -", "ball +/-"};
+    possibleInputStates = {"away +", "home +", "away move", "home move", "ballPos move", "away -", "home -", "ballPos +/-", "optical flow"};
     
     // read in data
-    ifstream awayPlayers_ifile("Files/awayPlayers");
-    ifstream homePlayers_ifile("Files/homePlayers");
-    ifstream ball_ifile("Files/ball");
-    ifstream sides_ifile("Files/sides");
-    ifstream corners_ifile("Files/corners");
-    ifstream poolBoundary_ifile("Files/poolBoundary");
-    ifstream waypoints_ifile("Files/waypoints");
+    ifstream awayPlayers_ifile(path+"awayPlayers");
+    ifstream homePlayers_ifile(path+"homePlayers");
+    ifstream ball_ifile(path+"ballPos");
+    ifstream sides_ifile(path+"sides");
+    ifstream corners_ifile(path+"corners");
+    ifstream poolBoundary_ifile(path+"poolBoundary");
+    //ifstream waypoints_ifile("Files/waypoints");
     double var1, var2, var3, var4, var5, var6, var7, var8, var9, var10, var11, var12, var13, var14, var15, var16;
-    bool bool1;
+    //bool bool1;
     char c;
     while (awayPlayers_ifile >> c >> var1 >> c >> var2 >> c >> var3 >> c >> var4 >> c >> var5 >> c >> var6 >> c >> var7 >> c >> var8 >> c >> var9 >> c >> var10 >> c >> var11 >> c >> var12 >> c >> var13 >> c >> var14 >> c) {awayPlayers_vector.push_back({Point2f(var1,var2), Point2f(var3,var4), Point2f(var5,var6), Point2f(var7,var8), Point2f(var9,var10), Point2f(var11,var12), Point2f(var13,var14)});}
     while (homePlayers_ifile >> c >> var1 >> c >> var2 >> c >> var3 >> c >> var4 >> c >> var5 >> c >> var6 >> c >> var7 >> c >> var8 >> c >> var9 >> c >> var10 >> c >> var11 >> c >> var12 >> c >> var13 >> c >> var14 >> c) {homePlayers_vector.push_back({Point2f(var1,var2), Point2f(var3,var4), Point2f(var5,var6), Point2f(var7,var8), Point2f(var9,var10), Point2f(var11,var12), Point2f(var13,var14)});}
@@ -92,7 +97,7 @@ void datacollection_players() {
     while (sides_ifile >> c >> var1 >> c >> var2 >> c >> var3 >> c >> var4 >> c >> var5 >> c >> var6 >> c >> var7 >> c >> var8 >> c >> var9 >> c >> var10 >> c >> var11 >> c >> var12 >> c >> var13 >> c >> var14 >> c >> var15 >> c >> var16 >> c) {sides_vector.push_back({Point2f(var1,var2), Point2f(var3,var4), Point2f(var5,var6), Point2f(var7,var8), Point2f(var9,var10), Point2f(var11,var12), Point2f(var13,var14), Point2f(var15,var16)});}
     while (corners_ifile >> c >> var1 >> c >> var2 >> c >> var3 >> c >> var4 >> c >> var5 >> c >> var6 >> c >> var7 >> c >> var8 >> c) {corners_vector.push_back({Point2f(var1,var2), Point2f(var3,var4), Point2f(var5,var6), Point2f(var7,var8)});}
     while (poolBoundary_ifile >> c >> var1 >> c >> var2 >> c >> var3 >> c >> var4 >> c >> var5 >> c >> var6 >> c >> var7 >> c >> var8 >> c >> var9 >> c >> var10 >> c >> var11 >> c >> var12 >> c >> var13 >> c >> var14 >> c >> var15 >> c >> var16 >> c) {poolBoundary_vector.push_back({Point2f(var1,var2), Point2f(var3,var4), Point2f(var5,var6), Point2f(var7,var8), Point2f(var9,var10), Point2f(var11,var12), Point2f(var13,var14), Point2f(var15,var16)});}
-    while (waypoints_ifile >> bool1) {waypoints_vector.push_back(bool1);}
+    //while (waypoints_ifile >> bool1) {waypoints_vector.push_back(bool1);}
     frame_count = static_cast<int>(cap.get(CAP_PROP_FRAME_COUNT));
     
     // edit data to be the length of the number of frames
@@ -102,10 +107,10 @@ void datacollection_players() {
     while (sides_vector.size() < frame_count) {sides_vector.push_back({Point2f(-10,-10), Point2f(-10,-10), Point2f(-10,-10), Point2f(-10,-10), Point2f(-10,-10), Point2f(-10,-10), Point2f(-10,-10), Point2f(-10,-10)});}
     while (corners_vector.size() < frame_count) {corners_vector.push_back({Point2f(-10,-10), Point2f(-10,-10), Point2f(-10,-10), Point2f(-10,-10)});}
     while (poolBoundary_vector.size() < frame_count) {poolBoundary_vector.push_back({Point2f(-10,-10), Point2f(-10,-10), Point2f(-10,-10), Point2f(-10,-10), Point2f(-10,-10), Point2f(-10,-10), Point2f(-10,-10), Point2f(-10,-10)});}
-    while (waypoints_vector.size() < frame_count) {waypoints_vector.push_back(0);}
+    //while (waypoints_vector.size() < frame_count) {waypoints_vector.push_back(0);}
     
     // iterate through data to interpolate all data between waypoints
-    for (int i=0; i<frame_count; i++) {
+    /*for (int i=0; i<frame_count; i++) {
         int waypoint1, waypoint2 = 0;
         if (waypoints_vector[i] == false) {continue;}
         else {
@@ -120,27 +125,98 @@ void datacollection_players() {
             if (waypoint2 == frame_count-1) {break;}
             i = waypoint2-1;
         }
-    }
+    }*/
+    
+    
+    Mat old_frameP = cam.clone();
+    cvtColor(old_frameP, old_grayP, COLOR_BGR2GRAY);
     
     itFrame = 0;
-    int nextIterator = 0;
+    int nextIterator = 1;
     
     while (true) {
         // read in new frame based on the current iterator and the desired iterator
-        if (itFrame>nextIterator) {cap.open(path); cap.read(cam); itFrame = 0;}
+        if (itFrame>nextIterator) {cap.open(path+"video.mp4"); cap.read(cam); itFrame = 0;}
         while (itFrame<nextIterator) {cap.read(cam); if (cam.empty()) {break;} itFrame++;}
         
-        awayPlayers = awayPlayers_vector[itFrame];
-        homePlayers = homePlayers_vector[itFrame];
-        ball = ball_vector[itFrame];
+        awayPlayers = awayPlayers_vector[itFrame-1];
+        homePlayers = homePlayers_vector[itFrame-1];
+        ballPos = ball_vector[itFrame-1];
         accuratePoint = false;
         
-        // check to make sure that each player and the ball which are out of the frame are at Point2f(-10,-10)
+        
+        
+        
+        if (opticalFlowTrackPointsP.size() < 5) {goodFeaturesToTrack(old_grayP, opticalFlowTrackPointsP, 100, 0.3, 7, Mat(), 7, false, 0.04);}
+        
+        // general optical flow data
+        cvtColor(cam, cam_grayP, COLOR_BGR2GRAY);
+        vector<uchar> status;
+        vector<float> err;
+        TermCriteria criteria = TermCriteria((TermCriteria::COUNT) + (TermCriteria::EPS), 10, 0.03);
+        
+        vector<Point2f> playersBall, new_playersBall;
+        playersBall = awayPlayers;
+        playersBall.insert(playersBall.end(), homePlayers.begin(), homePlayers.end());
+        playersBall.push_back(ballPos);
+        calcOpticalFlowPyrLK(old_grayP, cam_grayP, playersBall, new_playersBall, status, err, Size(15,15), 2, criteria);
+        awayPlayers.clear(); homePlayers.clear();
+        for (int i=0; i<new_playersBall.size(); i++) {
+            if (i<awayPlayers_vector[0].size()) {awayPlayers.push_back(new_playersBall[i]);}
+            else if (i == new_playersBall.size()-1) {ballPos = new_playersBall[i];}
+            else {homePlayers.push_back(new_playersBall[i]);}
+        }
+        old_grayP = cam_grayP.clone();
+        
+        /*calcOpticalFlowPyrLK(old_grayP, cam_grayP, opticalFlowTrackPointsP, new_opticalFlowTrackPointsP, status, err, Size(15,15), 2, criteria);
+        vector<Point2f> good_old, good_new;
+        for(uint i = 0; i < opticalFlowTrackPointsP.size(); i++)
+        {
+            // select good points
+            if(status[i] == 1) {
+                good_old.push_back(opticalFlowTrackPointsP[i]);
+                good_new.push_back(new_opticalFlowTrackPointsP[i]);
+            }
+        }
+        // update the previous frame and previous points
+        opticalFlowTrackPointsP = good_new;
+        old_grayP = cam_grayP.clone();
+
+        if (opticalFlowTrackPointsP.size() > 3) {
+            
+            Mat globalMotionMatrix = cv::videostab::estimateGlobalMotionLeastSquares(good_old, good_new);
+            
+            // estimate the position of the players and ballPos based on camera movement
+            for (int i=0; i<awayPlayers_vector[0].size(); i++) {
+                float xAway = awayPlayers_vector[itFrame-1][i].x*globalMotionMatrix.at<float>(0,0) + awayPlayers_vector[itFrame-1][i].y*globalMotionMatrix.at<float>(0,1) + globalMotionMatrix.at<float>(0,2);
+                float xHome = homePlayers_vector[itFrame-1][i].x*globalMotionMatrix.at<float>(0,0) + homePlayers_vector[itFrame-1][i].y*globalMotionMatrix.at<float>(0,1) + globalMotionMatrix.at<float>(0,2);
+                float yAway = awayPlayers_vector[itFrame-1][i].x*globalMotionMatrix.at<float>(1,0) + awayPlayers_vector[itFrame-1][i].y*globalMotionMatrix.at<float>(1,1) + globalMotionMatrix.at<float>(1,2);
+                float yHome = homePlayers_vector[itFrame-1][i].x*globalMotionMatrix.at<float>(1,0) + homePlayers_vector[itFrame-1][i].y*globalMotionMatrix.at<float>(1,1) + globalMotionMatrix.at<float>(1,2);
+                float zAway = awayPlayers_vector[itFrame-1][i].x*globalMotionMatrix.at<float>(2,0) + awayPlayers_vector[itFrame-1][i].y*globalMotionMatrix.at<float>(2,1) + globalMotionMatrix.at<float>(2,2);
+                float zHome = homePlayers_vector[itFrame-1][i].x*globalMotionMatrix.at<float>(2,0) + homePlayers_vector[itFrame-1][i].y*globalMotionMatrix.at<float>(2,1) + globalMotionMatrix.at<float>(2,2);
+                awayPlayers_vector[itFrame][i] = Point2f(xAway/zAway,yAway/zAway);
+                homePlayers_vector[itFrame][i] = Point2f(xHome/zHome,yHome/zHome);
+            }
+            float xBall = ball_vector[itFrame-1].x*globalMotionMatrix.at<float>(0,0) + ball_vector[itFrame-1].y*globalMotionMatrix.at<float>(0,1) + globalMotionMatrix.at<float>(0,2);
+            float yBall = ball_vector[itFrame-1].x*globalMotionMatrix.at<float>(1,0) + ball_vector[itFrame-1].y*globalMotionMatrix.at<float>(1,1) + globalMotionMatrix.at<float>(1,2);
+            float zBall = ball_vector[itFrame-1].x*globalMotionMatrix.at<float>(2,0) + ball_vector[itFrame-1].y*globalMotionMatrix.at<float>(2,1) + globalMotionMatrix.at<float>(2,2);
+            ball_vector[itFrame] = Point2f(xBall/zBall,yBall/zBall);
+        } else {
+            awayPlayers_vector[itFrame] = awayPlayers_vector[itFrame-1];
+            homePlayers_vector[itFrame] = homePlayers_vector[itFrame-1];
+            ball_vector[itFrame] = ball_vector[itFrame-1];
+        }*/
+        
+        //awayPlayers = awayPlayers_vector[itFrame];
+        //homePlayers = homePlayers_vector[itFrame];
+        //ballPos = ball_vector[itFrame];
+        
+        // check to make sure that each player and the ballPos which are out of the frame are at Point2f(-10,-10)
         for (int i=0; i<awayPlayers.size(); i++) {
             if (awayPlayers[i].x < 0 || awayPlayers[i].x > cam.cols || awayPlayers[i].y < 0 || awayPlayers[i].y > cam.rows) {awayPlayers[i] = Point2f(-10,-10);}
             if (homePlayers[i].x < 0 || homePlayers[i].x > cam.cols || homePlayers[i].y < 0 || homePlayers[i].y > cam.rows) {homePlayers[i] = Point2f(-10,-10);}
         }
-        if (ball.x < 0 || ball.x > cam.cols || ball.y < 0 || ball.y > cam.rows) {ball = Point2f(-10,-10);}
+        if (ballPos.x < 0 || ballPos.x > cam.cols || ballPos.y < 0 || ballPos.y > cam.rows) {ballPos = Point2f(-10,-10);}
         
         // wait for user input to determine the state or to move on to the next frame
         while (true) {
@@ -148,6 +224,24 @@ void datacollection_players() {
             drawCamera_DATACOLLECTION();
             int key = waitKey(10);
             if (key == 27) {finalRun = true; break;}
+            if (key == 'p' || itFrame == 1) {
+                while (true) {
+                    drawCamera_DATACOLLECTION();
+                    int key2 = waitKey(10);
+                    if (key2 == '1') {inputState = possibleInputStates[0];}
+                    if (key2 == '2') {inputState = possibleInputStates[1];}
+                    if (key2 == '3') {inputState = possibleInputStates[2];}
+                    if (key2 == '4') {inputState = possibleInputStates[3];}
+                    if (key2 == '5') {inputState = possibleInputStates[4];}
+                    if (key2 == '6') {inputState = possibleInputStates[5];}
+                    if (key2 == '7') {inputState = possibleInputStates[6];}
+                    if (key2 == '8') {inputState = possibleInputStates[7];}
+                    if (key2 == '9') {inputState = possibleInputStates[8];}
+                    if (key2 == 'c') {break;}
+                }
+            }
+            nextIterator++;
+            break;
             if (inputState == "initialize") {continue;}
             if (key == 'q') {nextIterator = itFrame-100; nextIterator  = (nextIterator<0) ? 0 : nextIterator; frameState="Q"; break;}
             if (key == 'w') {nextIterator = itFrame-10; nextIterator  = (nextIterator<0) ? 0 : nextIterator; frameState="W"; break;}
@@ -167,16 +261,16 @@ void datacollection_players() {
         }
         
         // if the frame was edited
-        if (accuratePoint == true) {
-            cout<<"ACCURATE POINT IS TRUE"<<endl;
+        //if (accuratePoint == true) {
+            //cout<<"ACCURATE POINT IS TRUE"<<endl;
             // store the current positions if a change was made
             awayPlayers_vector[itFrame] = awayPlayers;
             homePlayers_vector[itFrame] = homePlayers;
-            ball_vector[itFrame] = ball;
-            waypoints_vector[itFrame] = true;
+            ball_vector[itFrame] = ballPos;
+            //waypoints_vector[itFrame] = true;
             
             // find the previous and next waypoints
-            int previousWaypoint = itFrame-1;
+            /*int previousWaypoint = itFrame-1;
             int nextWaypoint = itFrame+1;
             for (int decrement=itFrame-1; decrement > itFrame-101; decrement--) {
                 if (decrement < 0) {previousWaypoint = 0; break;}
@@ -191,24 +285,24 @@ void datacollection_players() {
             interpolateBetweenWaypoints(previousWaypoint, itFrame, awayPlayers_vector, homePlayers_vector, ball_vector);
             interpolateBetweenWaypoints(itFrame, nextWaypoint, awayPlayers_vector, homePlayers_vector, ball_vector);
             
-        }
+        }*/
         
         if (finalRun) {break;}
     }
     
     // save data to files
-    ofstream awayPlayers_ofile("Files/awayPlayers");
-    ofstream homePlayers_ofile("Files/homePlayers");
-    ofstream ball_ofile("Files/ball");
-    ofstream waypoints_ofile("Files/waypoints");
+    ofstream awayPlayers_ofile(path+"awayPlayers");
+    ofstream homePlayers_ofile(path+"homePlayers");
+    ofstream ball_ofile(path+"ballPos");
+    //ofstream waypoints_ofile("Files/waypoints");
     ostream_iterator<vector<Point2f>> awayPlayers_iterator(awayPlayers_ofile, "\n" );
     ostream_iterator<vector<Point2f>> homePlayers_iterator(homePlayers_ofile, "\n" );
     ostream_iterator<Point2f> ball_iterator(ball_ofile, "\n" );
-    ostream_iterator<bool> waypoints_iterator(waypoints_ofile, "\n" );
+    //ostream_iterator<bool> waypoints_iterator(waypoints_ofile, "\n" );
     copy(awayPlayers_vector.begin( ), awayPlayers_vector.end( ), awayPlayers_iterator);
     copy(homePlayers_vector.begin( ), homePlayers_vector.end( ), homePlayers_iterator);
     copy(ball_vector.begin( ), ball_vector.end( ), ball_iterator);
-    copy(waypoints_vector.begin( ), waypoints_vector.end( ), waypoints_iterator);
+    //copy(waypoints_vector.begin( ), waypoints_vector.end( ), waypoints_iterator);
 }
 
 
@@ -233,16 +327,23 @@ void drawCamera_DATACOLLECTION() {
     Mat camMaskPositive = Mat::zeros(cam.size(), cam.type());
     Mat camMaskNegative = Mat::zeros(cam.size(), cam.type());
     
-    // circle on each player and ball
+    // circle on each player and ballPos
     for (int i=0; i<awayPlayers.size(); i++) {
         circle(camMask, awayPlayers[i], 5, awayColor, FILLED);
         circle(camMask, homePlayers[i], 5, homeColor, FILLED);
     }
-    circle(camMask, ball, 5, Scalar(0,255,255), FILLED);
+    circle(camMask, ballPos, 5, Scalar(0,255,255), FILLED);
     
     // lines for boundaries
     for (int i=0; i<corners.size(); i++) {
         line(camMaskPositive, corners[i], corners[(i+1)%corners.size()], Scalar(100,100,100), 3);
+    }
+    
+    // optical flow track points
+    if (inputState == "optical flow") {
+        for (int i=0; i<opticalFlowTrackPointsP.size(); i++) {
+            circle(camMask, opticalFlowTrackPointsP[i], 5, Scalar(255,105,180), FILLED);
+        }
     }
     
     // black bar on top and bottom
@@ -258,8 +359,8 @@ void drawCamera_DATACOLLECTION() {
         putText(camMask, possibleFrameKeys[i]+": "+possibleFrameStates[i], Point2f(cam.cols*(static_cast<double>(i)+0.5)/(static_cast<double>(possibleFrameStates.size()+1)+1.5), 25), FONT_HERSHEY_PLAIN, 1, Scalar(255,255,255), 1);
         }
     }
-    if (waypoints_vector[itFrame] == false && accuratePoint == false) {putText(camMask, "INTERPOLATED", Point2f(cam.cols*(static_cast<double>(possibleFrameStates.size())+0.5)/(static_cast<double>(possibleFrameStates.size()+1)+1.5), 25), FONT_HERSHEY_PLAIN, 1, Scalar(255,255,255), 1);}
-    else {putText(camMask, "WAYPOINT", Point2f(cam.cols*(static_cast<double>(possibleFrameStates.size())+0.5)/(static_cast<double>(possibleFrameStates.size()+1)+1.5), 25), FONT_HERSHEY_PLAIN, 1, Scalar(0,0,255), 1);}
+    //if (waypoints_vector[itFrame] == false && accuratePoint == false) {putText(camMask, "INTERPOLATED", Point2f(cam.cols*(static_cast<double>(possibleFrameStates.size())+0.5)/(static_cast<double>(possibleFrameStates.size()+1)+1.5), 25), FONT_HERSHEY_PLAIN, 1, Scalar(255,255,255), 1);}
+    //else {putText(camMask, "WAYPOINT", Point2f(cam.cols*(static_cast<double>(possibleFrameStates.size())+0.5)/(static_cast<double>(possibleFrameStates.size()+1)+1.5), 25), FONT_HERSHEY_PLAIN, 1, Scalar(0,0,255), 1);}
     putText(camMask, to_string(itFrame)+"/"+to_string(frame_count), Point2f(cam.cols*(static_cast<double>(possibleFrameStates.size()+1)+0.5)/(static_cast<double>(possibleFrameStates.size()+1)+1.5), 25), FONT_HERSHEY_PLAIN, 1, Scalar(255,255,255), 1);
     
     // text on bottom black bar
@@ -269,6 +370,9 @@ void drawCamera_DATACOLLECTION() {
         putText(camMask, to_string((i+1)%10)+": "+possibleInputStates[i], Point(cam.cols*i/static_cast<double>(possibleInputStates.size())+20, cam.rows-25), FONT_HERSHEY_PLAIN, 1, Scalar(255,255,255), 1);
         }
     }
+    if (inputState == "optical flow") {putText(camMask, "("+to_string(opticalFlowTrackPointsP.size())+")", Point2f(cam.cols-25, cam.rows-25), FONT_HERSHEY_PLAIN, 1, Scalar(0,0,255), 1);}
+    else {putText(camMask, "("+to_string(opticalFlowTrackPointsP.size())+")", Point2f(cam.cols-25, cam.rows-25), FONT_HERSHEY_PLAIN, 1, Scalar(255,255,255), 1);}
+    
     int awayPlayersCount = 0;
     int homePlayersCount = 0;
     for (int i=0; i<awayPlayers.size(); i++) {
@@ -350,18 +454,27 @@ void CallBackFunc_DATACOLLECTION_PLAYERS( int event, int x, int y, int flags, vo
             if (minDist == INT_MAX) {WARNING_noPlayersToRemove = true;}
             else {*ptrPlayer = Point2f(-10,-10);}
         }
-        else if (inputState == "ball +/-") {
-            if (ball == Point2f(-10,-10)) {ball = Point2f(x,y); ptrPlayer = &ball;}
-            else {ball = Point2f(-10,-10);}
+        else if (inputState == "ballPos +/-") {
+            if (ballPos == Point2f(-10,-10)) {ballPos = Point2f(x,y); ptrPlayer = &ballPos;}
+            else {ballPos = Point2f(-10,-10);}
         }
-        else if (inputState == "ball move") {
-            ptrPlayer = &ball;
+        else if (inputState == "ballPos move") {
+            ptrPlayer = &ballPos;
             *ptrPlayer = Point2f(x,y);
+        }
+        else if (inputState == "optical flow") {
+            if (opticalFlowTrackPointsP.empty()) {opticalFlowTrackPointsP.push_back(Point2f(x,y)); ptrPlayer = &opticalFlowTrackPointsP[0];}
+            else {
+                for (int i=0; i<opticalFlowTrackPointsP.size(); i++) {
+                    if (distance(opticalFlowTrackPointsP[i], Point2f(x,y)) < 5) {opticalFlowTrackPointsP.erase(opticalFlowTrackPointsP.begin()+i); ptrPlayer = nullptr; break;}
+                    else if (i == (opticalFlowTrackPointsP.size()-1)) {opticalFlowTrackPointsP.push_back(Point2f(x,y)); ptrPlayer = &opticalFlowTrackPointsP.back(); break;}
+                }
+            }
         }
         drawCamera_DATACOLLECTION();
     }
     else if (event == EVENT_MOUSEMOVE && inputPressed) {
-        if (inputState == "initialize" || inputState == "away +" || inputState == "away move" || inputState == "home +" || inputState == "home move" || inputState == "ball +/-" || inputState == "ball move") {
+        if (inputState == "initialize" || inputState == "away +" || inputState == "away move" || inputState == "home +" || inputState == "home move" || inputState == "ballPos +/-" || inputState == "ballPos move" || inputState == "optical flow") {
             if (ptrPlayer != nullptr) {*ptrPlayer = Point2f(x,y);}
         }
         drawCamera_DATACOLLECTION();
@@ -388,7 +501,7 @@ void interpolateBetweenWaypoints(int way1, int way2, vector<vector<Point2f>> &aw
     }
     
     cout<<"waypoint 1: "<<way1<<" --> "<<ball_vector[way1]<<"   waypoint 2: "<<way2<<" --> "<<ball_vector[way2]<<endl;
-    cout<<"ball interpolator: "<<ball_inter<<endl;
+    cout<<"ballPos interpolator: "<<ball_inter<<endl;
     
     
     for (int interpolator=way1+1; interpolator<way2; interpolator++) {

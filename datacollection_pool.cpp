@@ -50,7 +50,8 @@ int frame_count;
 
 
 
-void datacollection_pool() {
+void datacollection_pool(string path) {
+    
     // declare variables
     vector<vector<Point2f>> sides_vector;
     vector<vector<Point2f>> corners_vector;
@@ -58,18 +59,17 @@ void datacollection_pool() {
     bool finalRun = false;
     
     // prepare video for frame-by-frame input with the callback function and read in the first frame
-    string path = "Resources/LindberghPool/video.mp4";
     VideoCapture cap;
-    cap.open(path);
+    cap.open(path+"video.mp4");
     cap.read(cam);
     namedWindow("Camera");
     setMouseCallback("Camera", CallBackFunc_DATACOLLECTION_POOL);
     possibleInputStates_POOL = {"sidelines move", "optical flow", "make/delete waypoint"};
     
     // read in data
-    ifstream sides_ifile("Files/sides");
-    ifstream corners_ifile("Files/corners");
-    ifstream poolBoundary_ifile("Files/poolBoundary");
+    ifstream sides_ifile(path+"sides");
+    ifstream corners_ifile(path+"corners");
+    ifstream poolBoundary_ifile(path+"poolBoundary");
     double var1, var2, var3, var4, var5, var6, var7, var8, var9, var10, var11, var12, var13, var14, var15, var16;
     char c;
     while (sides_ifile >> c >> var1 >> c >> var2 >> c >> var3 >> c >> var4 >> c >> var5 >> c >> var6 >> c >> var7 >> c >> var8 >> c >> var9 >> c >> var10 >> c >> var11 >> c >> var12 >> c >> var13 >> c >> var14 >> c >> var15 >> c >> var16 >> c) {sides_vector.push_back({Point2f(var1,var2), Point2f(var3,var4), Point2f(var5,var6), Point2f(var7,var8), Point2f(var9,var10), Point2f(var11,var12), Point2f(var13,var14), Point2f(var15,var16)});}
@@ -231,9 +231,9 @@ void datacollection_pool() {
     }
     
     // save data to files
-    ofstream sides_ofile("Files/sides");
-    ofstream corners_ofile("Files/corners");
-    ofstream poolBoundary_ofile("Files/poolBoundary");
+    ofstream sides_ofile(path+"sides");
+    ofstream corners_ofile(path+"corners");
+    ofstream poolBoundary_ofile(path+"poolBoundary");
     //ofstream wayptsPool_ofile("Files/wayptsPool");
     ostream_iterator<vector<Point2f>> sides_iterator(sides_ofile, "\n" );
     ostream_iterator<vector<Point2f>> corners_iterator(corners_ofile, "\n" );
@@ -504,7 +504,7 @@ void CallBackFunc_DATACOLLECTION_POOL( int event, int x, int y, int flags, void*
 // optical flow between the current and the next waypoint
 void opticalflowBetweenWaypoints(int way1, int way2, vector<vector<Point2f>> &sides_vector, vector<vector<Point2f>> &corners_vector, vector<vector<Point2f>> &poolBoundary_vector) {
     
-    string path = "Resources/LindberghPool/video.mp4";
+    string path = "data/lindbergh/sluh-lindbergh/040717/video.mp4";
     VideoCapture capOF;
     Mat camOF;
     capOF.open(path);
