@@ -44,8 +44,8 @@ double distance(cv::Point2f a, cv::Point2f b);
 // DATA COLLECTION PLAYERS function declarations
 void datacollection_players(std::string path);
 //double distance(cv::Point2f a, cv::Point2f b);
-void drawCamera_DATACOLLECTION();
-void CallBackFunc_DATACOLLECTION_PLAYERS( int event, int x, int y, int flags, void* userdata);
+void drawCamera_DATACOLLECTION_PLAY();
+void CallBackFunc_DATACOLLECTION_PLAY( int event, int x, int y, int flags, void* userdata);
 void interpolateBetweenWaypoints(int way1, int way2, std::vector<std::vector<cv::Point2f>> &awayPlayers_vector, std::vector<std::vector<cv::Point2f>> &homePlayers_vector, std::vector<cv::Point2f> &ball_vector);
 
 // ANALYSIS
@@ -65,7 +65,7 @@ public:
 // PRESENTATION function declarations
 void presentation(std::string path);
 void drawCamera_PRESENTATION(cv::Mat cam, int iterator, std::vector<std::vector<cv::Point2f>> awayPlayers_vector, std::vector<std::vector<cv::Point2f>> homePlayers_vector,std::vector<cv::Point2f> ball_vector, std::vector<std::vector<cv::Point2f>> corners_vector);
-void drawAnimated_PRESENTATION(int iterator, std::vector<std::vector<cv::Point2f>> awayPlayers_vector, std::vector<std::vector<cv::Point2f>> homePlayers_vector,std::vector<cv::Point2f> ball_vector, std::vector<std::vector<cv::Point2f>> corners_vector, std::vector<std::vector<cv::Point2f>> poolBoundaryCamera);
+void drawAnimated_PRESENTATION(int iterator, std::vector<std::vector<cv::Point2f>> awayPlayers_vector_anim, std::vector<std::vector<cv::Point2f>> homePlayers_vector_anim,std::vector<cv::Point2f> ball_vector_anim, std::vector<std::vector<cv::Point2f>> corners_vector_anim, std::vector<std::vector<cv::Point2f>> poolBoundary_vector_anim);
 void drawStatistics_PRESENTATION(int iterator);
 
 #endif /* functions_hpp */

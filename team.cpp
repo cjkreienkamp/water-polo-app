@@ -71,6 +71,7 @@ void teamdata(string path)
     float poolLengthMax = 25;
     float poolLengthMin = 22.9;
     float poolWidthMax = 20;
+    float eightLanes = 17.04;
     float poolWidthMin = 13;
     //float floatingGoalLine2Ropes = 0.30;
     //float floatingGoalLine2Wall = 1.66;
@@ -83,7 +84,7 @@ void teamdata(string path)
     team b(Scalar(0,171,231), Scalar(0,0,0), Scalar(0,0,0), ballRadius, 0); ball = b;
     team sluh(Scalar(162,72,0), Scalar(255,255,255), Scalar(255,255,255), poolLengthMin, poolWidthMin);
     team lindbergh(Scalar(61,111,0), Scalar(1,210,254), Scalar(255,255,255), poolLengthMax, poolWidthMax);
-    team kirkwood(Scalar(58,68,229), Scalar(255,255,255), Scalar(255,255,255), poolLengthMax, poolWidthMin);
+    team kirkwood(Scalar(58,68,229), Scalar(255,255,255), Scalar(255,255,255), poolLengthMax, eightLanes);
     team parkwaywest(Scalar(203,147,70), Scalar(36,42,151), Scalar(255,255,255), poolLengthMin, poolWidthMin);
     
     // assign the location, home team, and away team to different objects

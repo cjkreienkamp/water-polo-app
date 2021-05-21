@@ -79,13 +79,10 @@ vector<Point2f> findCamPoolCorners(Mat img, vector<Point2f> poolBoundary);*/
 
 
 int main() {
-    string path = "data/lindbergh/sluh-lindbergh/040717/";
+    string path = "data/kirkwood/parkwaywest-kirkwood/042921/";
     teamdata(path);
     //datacollection_pool(path);
     //datacollection_players(path);
-    //analysis(path);
+    analysis(path);
     presentation(path);
 }
-
-
-// collect data from a different water polo game

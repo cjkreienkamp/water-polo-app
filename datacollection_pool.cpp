@@ -20,8 +20,10 @@ using namespace std;
 using namespace cv;
 
 // ### IMPROVEMENTS ###
-// - 2 modes, collecting and editing, designated by an input of true or false (bool T4collect_F4edit)
-// - make the controls more fitting (pause, sidelines edit, optical flow point edit, move corners, bring sidelines on screen)
+// - editing mode (same bottom controls, but allow for frame navigation at the top by means of a deque)
+// - fix the controls to be move point, translate, collect
+// - incorporate the 2M, 6M, and half
+// - include a small window to the side which helps for the choosing of proper points
 
 // DATA COLLECTION POOL global variables
 vector<Point2f> pointsSide;
@@ -35,15 +37,7 @@ vector<string> possibleInputStates_POOL;
 string inputState = "initialize";
 string frameState = "R";
 bool inputPressed = false;
-//bool goodptPool = false;
-
-//bool WARNING_tooManyPlayers = false;
-//bool WARNING_noPlayersToMove = false;
-//bool WARNING_noPlayersToRemove = false;
-//int countWARNING_tooManyPlayers = 0;
-//int countWARNING_noPlayersToMove = 0;
-//int countWARNING_noPlayersToRemove = 0;
-
+bool T4collect_F4edit;
 Mat cam;
 unsigned int itFrame;
 int frame_count;
@@ -57,6 +51,7 @@ void datacollection_pool(string path) {
     vector<vector<Point2f>> corners_vector;
     vector<vector<Point2f>> poolBoundary_vector;
     bool finalRun = false;
+    T4collect_F4edit = true;
     
     // prepare video for frame-by-frame input with the callback function and read in the first frame
     VideoCapture cap;
@@ -64,17 +59,26 @@ void datacollection_pool(string path) {
     cap.read(cam);
     namedWindow("Camera");
     setMouseCallback("Camera", CallBackFunc_DATACOLLECTION_POOL);
-    possibleInputStates_POOL = {"sidelines move", "optical flow", "make/delete waypoint"};
+    possibleInputStates_POOL = {"sidelines move", "translate sidelines", "translate all", "collect sidelines", "optical flow"};
     
-    // read in data
-    ifstream sides_ifile(path+"sides");
-    ifstream corners_ifile(path+"corners");
-    ifstream poolBoundary_ifile(path+"poolBoundary");
-    double var1, var2, var3, var4, var5, var6, var7, var8, var9, var10, var11, var12, var13, var14, var15, var16;
-    char c;
-    while (sides_ifile >> c >> var1 >> c >> var2 >> c >> var3 >> c >> var4 >> c >> var5 >> c >> var6 >> c >> var7 >> c >> var8 >> c >> var9 >> c >> var10 >> c >> var11 >> c >> var12 >> c >> var13 >> c >> var14 >> c >> var15 >> c >> var16 >> c) {sides_vector.push_back({Point2f(var1,var2), Point2f(var3,var4), Point2f(var5,var6), Point2f(var7,var8), Point2f(var9,var10), Point2f(var11,var12), Point2f(var13,var14), Point2f(var15,var16)});}
-    while (corners_ifile >> c >> var1 >> c >> var2 >> c >> var3 >> c >> var4 >> c >> var5 >> c >> var6 >> c >> var7 >> c >> var8 >> c) {corners_vector.push_back({Point2f(var1,var2), Point2f(var3,var4), Point2f(var5,var6), Point2f(var7,var8)});}
-    while (poolBoundary_ifile >> c >> var1 >> c >> var2 >> c >> var3 >> c >> var4 >> c >> var5 >> c >> var6 >> c >> var7 >> c >> var8 >> c >> var9 >> c >> var10 >> c >> var11 >> c >> var12 >> c >> var13 >> c >> var14 >> c >> var15 >> c >> var16 >> c) {poolBoundary_vector.push_back({Point2f(var1,var2), Point2f(var3,var4), Point2f(var5,var6), Point2f(var7,var8), Point2f(var9,var10), Point2f(var11,var12), Point2f(var13,var14), Point2f(var15,var16)});}
+    if (T4collect_F4edit) {
+        // find the sidelines for the first frame
+        pointsSide = {Point2f(-10,-10), Point2f(-10,-10), Point2f(-10,-10), Point2f(-10,-10), Point2f(-10,-10), Point2f(-10,-10), Point2f(-10,-10), Point2f(-10,-10)};
+        while (inputState == "initialize") {drawCamera_DATACOLLECTION_POOL(cam); waitKey(1);}
+        sides_vector.push_back(pointsSide);
+        corners_vector.push_back(poolSides2Corners(sides_vector[0]));
+        poolBoundary_vector.push_back(poolBoundary);
+    } else {
+        // read in data
+        ifstream sides_ifile(path+"sides");
+        ifstream corners_ifile(path+"corners");
+        ifstream poolBoundary_ifile(path+"poolBoundary");
+        double var1, var2, var3, var4, var5, var6, var7, var8, var9, var10, var11, var12, var13, var14, var15, var16;
+        char c;
+        while (sides_ifile >> c >> var1 >> c >> var2 >> c >> var3 >> c >> var4 >> c >> var5 >> c >> var6 >> c >> var7 >> c >> var8 >> c >> var9 >> c >> var10 >> c >> var11 >> c >> var12 >> c >> var13 >> c >> var14 >> c >> var15 >> c >> var16 >> c) {sides_vector.push_back({Point2f(var1,var2), Point2f(var3,var4), Point2f(var5,var6), Point2f(var7,var8), Point2f(var9,var10), Point2f(var11,var12), Point2f(var13,var14), Point2f(var15,var16)});}
+        while (corners_ifile >> c >> var1 >> c >> var2 >> c >> var3 >> c >> var4 >> c >> var5 >> c >> var6 >> c >> var7 >> c >> var8 >> c) {corners_vector.push_back({Point2f(var1,var2), Point2f(var3,var4), Point2f(var5,var6), Point2f(var7,var8)});}
+        while (poolBoundary_ifile >> c >> var1 >> c >> var2 >> c >> var3 >> c >> var4 >> c >> var5 >> c >> var6 >> c >> var7 >> c >> var8 >> c >> var9 >> c >> var10 >> c >> var11 >> c >> var12 >> c >> var13 >> c >> var14 >> c >> var15 >> c >> var16 >> c) {poolBoundary_vector.push_back({Point2f(var1,var2), Point2f(var3,var4), Point2f(var5,var6), Point2f(var7,var8), Point2f(var9,var10), Point2f(var11,var12), Point2f(var13,var14), Point2f(var15,var16)});}
+    }
     
     // edit data to be the length of the number of frames
     frame_count = static_cast<int>(cap.get(CAP_PROP_FRAME_COUNT));
@@ -82,56 +86,27 @@ void datacollection_pool(string path) {
     while (corners_vector.size() < frame_count) {corners_vector.push_back({Point2f(-10,-10), Point2f(-10,-10), Point2f(-10,-10), Point2f(-10,-10)});}
     while (poolBoundary_vector.size() < frame_count) {poolBoundary_vector.push_back({Point2f(-10,-10), Point2f(-10,-10), Point2f(-10,-10), Point2f(-10,-10), Point2f(-10,-10), Point2f(-10,-10), Point2f(-10,-10), Point2f(-10,-10)});}
     
-    // iterate through data to find all data between waypoints by means of optical flow
-    /*if (corners_vector[frame_count-22][0] == Point2f(-10,-10)) {
-        cout<<"initializing data set"<<endl;
-        for (int i=0; i<frame_count; i++) {
-            int waypoint1, waypoint2 = 0;
-            if (wayptsPool_vector[i] == false) {continue;}
-            else {
-                waypoint1 = i;
-                for (int j=i+1; j<frame_count; j++) {
-                    if (wayptsPool_vector[j] == true) {
-                        waypoint2 = j;
-                        break;
-                    } else if (j == frame_count-1) {waypoint2 = frame_count-1;}
-                }
-                opticalflowBetweenWaypoints(waypoint1, waypoint2, sides_vector, corners_vector, poolBoundary_vector);
-                if (waypoint2 == frame_count-1) {break;}
-                i = waypoint2-1;
-            }
-        }
-    }*/
-    
-
+    // optical flow initialization
     Mat cam_gray;
     Mat old_gray;
     Mat old_frame = cam.clone();
     cvtColor(old_frame, old_gray, COLOR_BGR2GRAY);
     vector<Point2f> new_opticalFlowTrackPoints;
     
-    pointsSide = sides_vector[0];
-    
+    // main while loop to read in the video frames
     itFrame = 0;
     int nextIterator = 1;
-    
     while (true) {
         // read in new frame based on the current iterator and the desired iterator
         if (itFrame>nextIterator) {cap.open(path); cap.read(cam); itFrame = 0;}
         while (itFrame<nextIterator) {cap.read(cam); if (cam.empty()) {break;} itFrame++;}
         
-        pointsSide = sides_vector[itFrame];
-        pointsCorner = poolSides2Corners(pointsSide);
-        //goodptPool = false;
-        
-        if (opticalFlowTrackPoints.size() < 5) {goodFeaturesToTrack(old_gray, opticalFlowTrackPoints, 100, 0.3, 7, Mat(), 7, false, 0.04);}
-        
         // general optical flow data
+        if (opticalFlowTrackPoints.size() < 5) {goodFeaturesToTrack(old_gray, opticalFlowTrackPoints, 100, 0.3, 7, Mat(), 7, false, 0.04);}
         cvtColor(cam, cam_gray, COLOR_BGR2GRAY);
         vector<uchar> status;
         vector<float> err;
         TermCriteria criteria = TermCriteria((TermCriteria::COUNT) + (TermCriteria::EPS), 10, 0.03);
-        
         calcOpticalFlowPyrLK(old_gray, cam_gray, opticalFlowTrackPoints, new_opticalFlowTrackPoints, status, err, Size(15,15), 2, criteria);
         vector<Point2f> good_old, good_new;
         for(uint i = 0; i < opticalFlowTrackPoints.size(); i++)
@@ -146,10 +121,9 @@ void datacollection_pool(string path) {
         opticalFlowTrackPoints = good_new;
         old_gray = cam_gray.clone();
 
+        // calculate the new sides based on the optical flow data
         if (opticalFlowTrackPoints.size() > 3) {
-            
             Mat globalMotionMatrix = cv::videostab::estimateGlobalMotionLeastSquares(good_old, good_new);
-            
             // estimate the position of the pool sides based on camera movement
             for (int i=0; i<sides_vector[0].size(); i++) {
                 float x = sides_vector[itFrame-1][i].x*globalMotionMatrix.at<float>(0,0) + sides_vector[itFrame-1][i].y*globalMotionMatrix.at<float>(0,1) + globalMotionMatrix.at<float>(0,2);
@@ -158,91 +132,76 @@ void datacollection_pool(string path) {
                 sides_vector[itFrame][i] = Point2f(x/z,y/z);
             }
         } else {sides_vector[itFrame] = sides_vector[itFrame-1];}
-        
         corners_vector[itFrame] = poolSides2Corners(sides_vector[itFrame]);
         poolBoundary_vector[itFrame] = poolBoundary;
-        
         pointsSide = sides_vector[itFrame];
         pointsCorner = poolSides2Corners(pointsSide);
         
         // wait for user input to determine the state or to move on to the next frame
         while (true) {
             drawCamera_DATACOLLECTION_POOL(cam);
-            int key = waitKey(10);
+            int key = waitKey(1);
             if (key == 27) {finalRun = true; break;}
-            if (inputState == "initialize") {continue;}
-            if (key == 'q') {nextIterator = itFrame-100; nextIterator  = (nextIterator<0) ? 0 : nextIterator; frameState="Q"; break;}
-            if (key == 'w') {nextIterator = itFrame-10; nextIterator  = (nextIterator<0) ? 0 : nextIterator; frameState="W"; break;}
-            if (key == 'e') {nextIterator = itFrame-1; nextIterator  = (nextIterator<0) ? 0 : nextIterator; frameState="E"; break;}
-            if (key == 'r') {nextIterator = itFrame+1; nextIterator  = (frame_count>nextIterator) ? nextIterator : static_cast<int>(frame_count-1); frameState="R"; break;}
-            if (key == 't') {nextIterator = itFrame+10; nextIterator  = (frame_count>nextIterator) ? nextIterator : static_cast<int>(frame_count-1); frameState="T"; break;}
-            if (key == 'y') {nextIterator = itFrame+100; nextIterator  = (frame_count>nextIterator) ? nextIterator : static_cast<int>(frame_count-1); frameState="Y"; break;}
-            //if (key == 'u') {goodptPool = false; waypoints_vector[itFrame] = false;}
-            if (key == '1') {inputState = possibleInputStates_POOL[0];}
-            if (key == '2') {inputState = possibleInputStates_POOL[1];}
-            if (key == 'p') {waitKey(0);}
-            nextIterator++; break;
-            //if (key == '3') {
-            //    inputState = possibleInputStates_POOL[2];
-            //    if (wayptsPool_vector[itFrame] == false) {goodptPool = true; wayptsPool_vector[itFrame] = true;}
-            //    else {
-            //        goodptPool = false;
-            //        wayptsPool_vector[itFrame] = false;
-            //        int previousWaypoint = itFrame-1;
-            //        int nextWaypoint = itFrame+1;
-            //        for (int increment=itFrame+1; increment < frame_count; increment++) {
-            //            if (increment >= frame_count) {nextWaypoint = static_cast<int>(frame_count-1); break;}
-            //            if (wayptsPool_vector[increment] == true) {nextWaypoint = increment; break;}
-            //        }
-            //        for (int decrement=itFrame-1; decrement > 0; decrement--) {
-            //            if (decrement >= frame_count) {nextWaypoint = static_cast<int>(frame_count-1); break;}
-            //            if (wayptsPool_vector[decrement] == true) {nextWaypoint = decrement; break;}
-            //        }
-            //        opticalflowBetweenWaypoints(previousWaypoint, nextWaypoint, sides_vector, corners_vector, poolBoundary_vector);
-            //    }
-            //}
+            if (T4collect_F4edit) {
+                if (key == '1') {inputState = possibleInputStates_POOL[0];}
+                if (key == '2') {inputState = possibleInputStates_POOL[1];}
+                if (key == '3') {inputState = possibleInputStates_POOL[2];}
+                if (key == '4') {inputState = possibleInputStates_POOL[3];}
+                if (key == '5') {inputState = possibleInputStates_POOL[4];}
+                if (key == 'c') {inputState = "continue2end"; break;}
+                if (key == 'p') {
+                    waitKey(1000);
+                    key = 0;
+                    while (key != 'p') {
+                        drawCamera_DATACOLLECTION_POOL(cam);
+                        key = waitKey(1);
+                        if (key == 27) {finalRun = true; break;}
+                        if (key == 'c') {inputState = "continue2end"; break;}
+                        if (key == '1') {inputState = possibleInputStates_POOL[0];}
+                        if (key == '2') {inputState = possibleInputStates_POOL[1];}
+                        if (key == '3') {inputState = possibleInputStates_POOL[2];}
+                        if (key == '4') {inputState = possibleInputStates_POOL[3];}
+                        if (key == '5') {inputState = possibleInputStates_POOL[4];}
+                    }
+                }
+                nextIterator++;
+                break;
+            } else {
+                if (key == 'q') {nextIterator = itFrame-100; nextIterator  = (nextIterator<0) ? 0 : nextIterator; frameState="Q"; break;}
+                if (key == 'w') {nextIterator = itFrame-10; nextIterator  = (nextIterator<0) ? 0 : nextIterator; frameState="W"; break;}
+                if (key == 'e') {nextIterator = itFrame-1; nextIterator  = (nextIterator<0) ? 0 : nextIterator; frameState="E"; break;}
+                if (key == 'r') {nextIterator = itFrame+1; nextIterator  = (frame_count>nextIterator) ? nextIterator : static_cast<int>(frame_count-1); frameState="R"; break;}
+                if (key == 't') {nextIterator = itFrame+10; nextIterator  = (frame_count>nextIterator) ? nextIterator : static_cast<int>(frame_count-1); frameState="T"; break;}
+                if (key == 'y') {nextIterator = itFrame+100; nextIterator  = (frame_count>nextIterator) ? nextIterator : static_cast<int>(frame_count-1); frameState="Y"; break;}
+            }
         }
         
-        /*if (goodptPool == true) {
-            cout<<"ACCURATE POINT IS TRUE"<<endl;
-            
-            // store the current positions if a change was made
-            sides_vector[itFrame] = pointsSide;
-            corners_vector[itFrame] = pointsCorner;
-            poolBoundary_vector[itFrame] = poolBoundary;
-            wayptsPool_vector[itFrame] = true;
-            
-            // find the next waypoint
-            int nextWaypoint = itFrame+1;
-            for (int increment=itFrame+1; increment < frame_count; increment++) {
-                if (increment >= frame_count) {nextWaypoint = static_cast<int>(frame_count-1); break;}
-                if (wayptsPool_vector[increment] == true) {nextWaypoint = increment; break;}
-            }
-            
-            // interpolate the values between the current frame and the next waypoint
-            opticalflowBetweenWaypoints(itFrame, nextWaypoint, sides_vector, corners_vector, poolBoundary_vector);
-        }*/
-        
+        // update the vectors that store the sides data
         sides_vector[itFrame] = pointsSide;
         corners_vector[itFrame] = pointsCorner;
         poolBoundary_vector[itFrame] = poolBoundary;
         
         if (finalRun) {break;}
+        if (inputState == "continue2end") {
+            for (int i=0; i<frame_count; i++) {
+                sides_vector[i] = sides_vector[itFrame];
+                corners_vector[i] = corners_vector[itFrame];
+                poolBoundary_vector[i] = poolBoundary_vector[itFrame];
+            }
+            break;
+        }
     }
     
     // save data to files
     ofstream sides_ofile(path+"sides");
     ofstream corners_ofile(path+"corners");
     ofstream poolBoundary_ofile(path+"poolBoundary");
-    //ofstream wayptsPool_ofile("Files/wayptsPool");
     ostream_iterator<vector<Point2f>> sides_iterator(sides_ofile, "\n" );
     ostream_iterator<vector<Point2f>> corners_iterator(corners_ofile, "\n" );
     ostream_iterator<vector<Point2f>> poolBoundary_iterator(poolBoundary_ofile, "\n" );
-    //ostream_iterator<bool> wayptsPool_iterator(wayptsPool_ofile, "\n" );
     copy(sides_vector.begin( ), sides_vector.end( ), sides_iterator);
     copy(corners_vector.begin( ), corners_vector.end( ), corners_iterator);
     copy(poolBoundary_vector.begin( ), poolBoundary_vector.end( ), poolBoundary_iterator);
-    //copy(wayptsPool_vector.begin( ), wayptsPool_vector.end( ), wayptsPool_iterator);
 }
 
 
@@ -404,20 +363,26 @@ void drawCamera_DATACOLLECTION_POOL(Mat cam) {
     rectangle(camMask, Point(0,cam.rows-50), Point(cam.cols,cam.rows), Scalar(0,0,0), FILLED);
     
     // text on top black bar
-    vector<string> possibleFrameStates = {"-100 frames", "-10 frames", "-1 frame", "+1 frame", "+10 frames", "+100 frames"};
-    vector<string> possibleFrameKeys = {"Q", "W", "E", "R", "T", "Y"};
+    vector<string> possibleFrameStates, possibleFrameKeys;
+    if (T4collect_F4edit) {
+        possibleFrameStates = {"play/pause", "continue to end"};
+        possibleFrameKeys = {"P", "C"};
+    } else {
+        possibleFrameStates = {"-100 frames", "-10 frames", "-1 frame", "+1 frame", "+10 frames", "+100 frames"};
+        possibleFrameKeys = {"Q", "W", "E", "R", "T", "Y"};
+    }
     if (inputState != "initialize") {
         for (int i=0; i<possibleFrameStates.size(); i++) {
-            if (frameState == possibleFrameStates[i]) {putText(camMask, possibleFrameKeys[i]+": "+possibleFrameStates[i], Point2f(cam.cols*(static_cast<double>(i)+0.5)/(static_cast<double>(possibleFrameStates.size())+1.5), 25), FONT_HERSHEY_PLAIN, 1, Scalar(0,0,255), 1);
+            if (frameState == possibleFrameStates[i]) {putText(camMask, possibleFrameKeys[i]+": "+possibleFrameStates[i], Point2f(cam.cols*(static_cast<double>(i)+0.5)/(static_cast<double>(possibleFrameStates.size())+1.5), 25), FONT_HERSHEY_PLAIN, 1.5, Scalar(0,0,255), 2);
             } else {
-            putText(camMask, possibleFrameKeys[i]+": "+possibleFrameStates[i], Point2f(cam.cols*(static_cast<double>(i)+0.5)/(static_cast<double>(possibleFrameStates.size())+1.5), 25), FONT_HERSHEY_PLAIN, 1, Scalar(255,255,255), 1);
+            putText(camMask, possibleFrameKeys[i]+": "+possibleFrameStates[i], Point2f(cam.cols*(static_cast<double>(i)+0.5)/(static_cast<double>(possibleFrameStates.size())+1.5), 25), FONT_HERSHEY_PLAIN, 1.5, Scalar(255,255,255), 2);
             }
         }
     }
-    putText(camMask, to_string(itFrame)+"/"+to_string(frame_count), Point2f(cam.cols*(static_cast<double>(possibleFrameStates.size())+0.5)/(static_cast<double>(possibleFrameStates.size())+1.5), 25), FONT_HERSHEY_PLAIN, 1, Scalar(255,255,255), 1);
+    putText(camMask, to_string(itFrame)+"/"+to_string(frame_count), Point2f(cam.cols*(static_cast<double>(possibleFrameStates.size())+0.5)/(static_cast<double>(possibleFrameStates.size())+1.5), 25), FONT_HERSHEY_PLAIN, 1.5, Scalar(255,255,255), 2);
     
     // text on bottom black bar
-    if (inputState == "initialize") {
+    if (inputState == "initialize" && T4collect_F4edit) {
         int numberSidesRemaining = 0;
         for (int i=0; i<pointsSide.size(); i++) {
             if (pointsSide[i] == Point2f(-10,-10)) {numberSidesRemaining++;}
@@ -426,26 +391,18 @@ void drawCamera_DATACOLLECTION_POOL(Mat cam) {
             inputState = "";
             pointsCorner = poolSides2Corners(pointsSide);
         }
-        putText(camMask, "Instructions: ", Point(cam.cols*4.0/10.0-70, cam.rows-25), FONT_HERSHEY_PLAIN, 1, Scalar(255,255,255), 1);
-        putText(camMask, "Choose "+to_string(numberSidesRemaining)+" remaining sides of pool", Point(cam.cols*4.0/10.0+70,cam.rows-25), FONT_HERSHEY_PLAIN, 1, Scalar(0,0,255), 1);
+        putText(camMask, "Instructions: ", Point(cam.cols*4.0/10.0-70, cam.rows-25), FONT_HERSHEY_PLAIN, 1.5, Scalar(255,255,255), 2);
+        putText(camMask, "Choose "+to_string(numberSidesRemaining)+" remaining sides of pool", Point(cam.cols*5.0/10.0-70,cam.rows-25), FONT_HERSHEY_PLAIN, 1.5, Scalar(0,0,255), 2);
     } else {
+        Scalar color;
         for (int i=0; i<possibleInputStates_POOL.size(); i++) {
-            if (inputState == possibleInputStates_POOL[i]) {putText(camMask, to_string((i+1)%10)+": "+possibleInputStates_POOL[i], Point2f(cam.cols*(static_cast<double>(i)+0.5)/(static_cast<double>(possibleFrameStates.size())+1.5), cam.rows-25), FONT_HERSHEY_PLAIN, 1, Scalar(0,0,255), 1);
-            } else {
-            putText(camMask, to_string((i+1)%10)+": "+possibleInputStates_POOL[i], Point2f(cam.cols*(static_cast<double>(i)+0.5)/(static_cast<double>(possibleFrameStates.size())+1.5), cam.rows-25), FONT_HERSHEY_PLAIN, 1, Scalar(255,255,255), 1);
-            }
+            if (inputState == possibleInputStates_POOL[i]) {color = Scalar(0,0,255);} else {color = Scalar(255,255,255);}
+            putText(camMask, to_string((i+1)%10)+": "+possibleInputStates_POOL[i], Point2f(cam.cols*(static_cast<double>(2*i+1))/(static_cast<double>(2*possibleInputStates_POOL.size()+1)), cam.rows-25), FONT_HERSHEY_PLAIN, 1.5, color, 2);
         }
-        if (inputState == "optical flow") {putText(camMask, "("+to_string(opticalFlowTrackPoints.size())+")", Point2f(cam.cols*(static_cast<double>(1.5)+0.5)/(static_cast<double>(possibleFrameStates.size())+1.5), cam.rows-25), FONT_HERSHEY_PLAIN, 1, Scalar(0,0,255), 1);}
-        else {putText(camMask, "("+to_string(opticalFlowTrackPoints.size())+")", Point2f(cam.cols*(static_cast<double>(1.5)+0.5)/(static_cast<double>(possibleFrameStates.size())+1.5), cam.rows-25), FONT_HERSHEY_PLAIN, 1, Scalar(255,255,255), 1);}
-        //if (wayptsPool_vector[itFrame] == false && goodptPool == false) {putText(camMask, "USING OPTICAL FLOW", Point2f(cam.cols*(static_cast<double>(possibleFrameStates.size())+0.5)/(static_cast<double>(possibleFrameStates.size()+1)+1.5), cam.rows-25), FONT_HERSHEY_PLAIN, 1, Scalar(255,255,255), 1);}
-        //else {putText(camMask, "WAYPOINT", Point2f(cam.cols*(static_cast<double>(possibleFrameStates.size())+0.5)/(static_cast<double>(possibleFrameStates.size()+1)+1.5), cam.rows-25), FONT_HERSHEY_PLAIN, 1, Scalar(0,0,255), 1);}
+        if (inputState == "optical flow") {color = Scalar(0,0,255);} else {color = Scalar(255,255,255);}
+        putText(camMask, "("+to_string(opticalFlowTrackPoints.size())+")", Point2f(cam.cols*(static_cast<double>(possibleInputStates_POOL.size())+0.5)/(static_cast<double>(possibleInputStates_POOL.size()+1)), cam.rows-25), FONT_HERSHEY_PLAIN, 1.5, color, 2);
     }
-    
-    // display any warnings
-    /*if (WARNING_tooManyPlayers) {putText(camMask, "WARNING: too many players", Point(cam.cols/8, cam.rows*4.0/9.0), FONT_HERSHEY_PLAIN, 5, Scalar(0,0,255), 4); countWARNING_tooManyPlayers++; if(countWARNING_tooManyPlayers>10){WARNING_tooManyPlayers = false; countWARNING_tooManyPlayers = 0;}}
-    if (WARNING_noPlayersToMove) {putText(camMask, "WARNING: no players to move", Point(cam.cols/8, cam.rows*4.0/9.0), FONT_HERSHEY_PLAIN, 5, Scalar(0,0,255), 4); countWARNING_noPlayersToMove++; if(countWARNING_noPlayersToMove>10){WARNING_noPlayersToMove = false; countWARNING_noPlayersToMove = 0;}}
-    if (WARNING_noPlayersToRemove) {putText(camMask, "WARNING: no players to remove", Point(cam.cols/8, cam.rows*4.0/9.0), FONT_HERSHEY_PLAIN, 5, Scalar(0,0,255), 4); countWARNING_noPlayersToRemove++; if(countWARNING_noPlayersToRemove>10){WARNING_noPlayersToRemove = false; countWARNING_noPlayersToRemove = 0;}}*/
-    
+
     // imshow camera
     add(camMask, camMaskPositive, camMask);
     subtract(camMask, camMaskNegative, camMask);
