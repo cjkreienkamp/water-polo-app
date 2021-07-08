@@ -26,17 +26,54 @@ extern team location;
 extern team away;
 extern team home;
 
-class shapeFromPoints {
+class poolIdentifier {
     vector<Point2f> points;
     vector<Point2f> corners;
+    Point2f* pointer;
     
 public:
     void addPoint(Point2f point) {
         points.push_back(point);
-        sortPointsClockwiseAroundCentroid(points);
-        
+        pointer = &points.back();
+        findCorners();
+    }
+    
+    void movePoint(Point2f point) {
+        *pointer = point;
+        findCorners();
+    }
+    
+    void moveAllPoints(double xTranslation, double yTranslation) {
+        for (int i=0; i<points.size(); i++) {
+            points[i] += Point2f(xTranslation, yTranslation);
+        }
+        findCorners();
+    }
+    
+    void resetPoints() {
+        points.clear();
+    }
+    
+    void setPointerFromPositionInVector(int i) {
+        pointer = &points[i];
+    }
+    
+    vector<Point2f> getCorners() {
+        if (corners.size() == 4) {
+            sortCornersClockwiseInPlaceWith0AtTopLeft(corners);
+        }
+        return corners;
+    }
+    
+    vector<Point2f> getPoints() {
+        return points;
+    }
+
+private:
+    void findCorners() {
+        vector<Point2f> sortedPoints = sortPointsClockwiseAroundCentroid(points);
         if (points.size()>8) {
-            vector<Point2f> mostSignificant8Points = reduceTo8MostSignificantPoints();
+            vector<Point2f> mostSignificant8Points = reduceTo8MostSignificantPoints(sortedPoints);
             
             vector<double> slopes1, slopes2, yIntercepts1, yIntercepts2;
             for (int i=0; i<8; i++) {
@@ -62,15 +99,6 @@ public:
         }
     }
     
-    vector<Point2f> getCorners() {
-        return corners;
-    }
-    
-    vector<Point2f> getPoints() {
-        return points;
-    }
-
-private:
     double findSlope(Point2f point1, Point2f point2) {
         double slope = static_cast<double>(point2.y - point1.y) / (point2.x - point1.x);
         return slope;
@@ -106,9 +134,8 @@ private:
         return intersection;
     }
     
-    void sortPointsClockwiseAroundCentroid(vector<Point2f> &pts) {
+    vector<Point2f> sortPointsClockwiseAroundCentroid(vector<Point2f> pts) {
         Point2f poolCentroid = centroidOfPoints(pts);
-        
         for (int i=0; i<pts.size(); i++) {
             for (int j=(int)(pts.size()-1); j>i; j--) {
                 double centroidAngle1 = atan2(poolCentroid.y-pts[j-1].y, poolCentroid.x-pts[j-1].x);
@@ -120,6 +147,7 @@ private:
                 }
             }
         }
+        return pts;
     }
     
     Point2f centroidOfPoints(vector<Point2f> pts) {
@@ -149,8 +177,8 @@ private:
         return corners;
     }
     
-    vector<Point2f> reduceTo8MostSignificantPoints() {
-        vector<Point2f> mostSignificant8Points = points;
+    vector<Point2f> reduceTo8MostSignificantPoints(vector<Point2f> pts) {
+        vector<Point2f> mostSignificant8Points = pts;
         while (mostSignificant8Points.size() > 8) {
             double minimumDistance = INT_MAX;
             vector<Point2f>::iterator ptr = mostSignificant8Points.begin();
@@ -207,41 +235,12 @@ private:
 };
 
 
+
+
+
+
+poolIdentifier pool;
 void uploadVideo(string path) {
-    
-    // ########## BEGIN TESTING ##########
-    Mat testImage = Mat(400, 400, CV_8UC3, Scalar(255,255,255));
-    shapeFromPoints pool;
-    
-    pool.addPoint(Point2f(40,300));
-    pool.addPoint(Point2f(60,200));
-    pool.addPoint(Point2f(80,340));
-    pool.addPoint(Point2f(100,100));
-    pool.addPoint(Point2f(120,90));
-    pool.addPoint(Point2f(150,85));
-    pool.addPoint(Point2f(200,80));
-    //pool.addPoint(Point2f(220,200));
-    pool.addPoint(Point2f(250,360));
-    pool.addPoint(Point2f(300,300));
-    pool.addPoint(Point2f(300,100));
-    pool.addPoint(Point2f(300,200));
-    pool.addPoint(Point2f(300,150));
-    
-    vector<Point2f> points = pool.getPoints();
-    vector<Point2f> corners = pool.getCorners();
-    
-    for (int i=0; i<points.size(); i++) {
-        circle(testImage, points[i], 5, Scalar(0,0,0), FILLED);
-    }
-
-    for (int i=0; i<4; i++) {
-        circle(testImage, corners[i], 3, Scalar(0,0,255), FILLED);
-        line(testImage, corners[i], corners[(i+1)%4], Scalar(255,0,0), 1);
-    }
-
-    imshow("test", testImage);
-    waitKey(0);
-    // ########## END TESTING ##########
     
     // read in the first frame of the video
     VideoCapture video;
@@ -250,6 +249,8 @@ void uploadVideo(string path) {
     video.read(firstFrame);
     namedWindow("First Frame of Video");
     setMouseCallback("First Frame of Video", getPoolCornersFromMouseInput);
+
+    // make a points from the class individually moveable, moveable as a group, and removeable
     
     bool editingPoolCornerLocations = true;
     while (editingPoolCornerLocations) {
@@ -264,15 +265,21 @@ void uploadVideo(string path) {
         }
     }
     
-    vector<Point2f> poolCornersInCameraFrame = getPoolCornersFromPoolSidePoints();
+    vector<Point2f> poolCornersInCameraFrame = pool.getCorners();
     vector<Point2f> poolCornersInPoolFrame = {Point2f(0,0), Point2f(location.poolLength,0), Point2f(location.poolLength,location.poolWidth), Point2f(0,location.poolWidth)};
     Mat homographyFromCameraFrameToPoolFrame = findHomography(poolCornersInCameraFrame,poolCornersInPoolFrame);
     
     vector<double> homographyVector = convertMatrixToVector(homographyFromCameraFrameToPoolFrame);
-    ofstream saveHomographyToFile(path+"homography");
-    ostream_iterator<double> homographyIterator(saveHomographyToFile, "\n" );
-    copy(homographyVector.begin( ), homographyVector.end( ), homographyIterator);
+    //ofstream saveHomographyToFile(path+"homography");
+    //ostream_iterator<double> homographyIterator(saveHomographyToFile, "\n" );
+    //copy(homographyVector.begin( ), homographyVector.end( ), homographyIterator);
 }
+
+
+
+
+
+
 
 
 
@@ -291,51 +298,41 @@ void getPoolCornersFromMouseInput( int event, int x, int y, int flags, void* use
         mouseClicking = true;
         
         if (!finishedInitializingPoolSides()) {
-            for (int i=0; i<eightPointsFormingPoolSides.size(); i++) {
-                if (eightPointsFormingPoolSides[i] == UNKNOWN_POINT) {
-                    eightPointsFormingPoolSides[i] = Point2f(x,y);
-                    ptrToPointFormingPoolSide = &eightPointsFormingPoolSides[i];
-                    break;
-                }
-            }
+            pool.addPoint(Point2f(x,y));
         }
         
         else if (finishedInitializingPoolSides()) {
             if (editMode == "move points") {
                 double distanceFromMouseToPointFormingPoolSide = INT_MAX;
-                for (int i=0; i<8; i++) {
-                    if (distance(Point2f(x,y),eightPointsFormingPoolSides[i]) < distanceFromMouseToPointFormingPoolSide) {
-                        distanceFromMouseToPointFormingPoolSide = distance(Point2f(x,y),eightPointsFormingPoolSides[i]);
-                        ptrToPointFormingPoolSide = &eightPointsFormingPoolSides[i];
+                for (int i=0; i<pool.getPoints().size(); i++) {
+                    if (distance(Point2f(x,y),pool.getPoints()[i]) < distanceFromMouseToPointFormingPoolSide) {
+                        distanceFromMouseToPointFormingPoolSide = distance(Point2f(x,y),pool.getPoints()[i]);
+                        pool.setPointerFromPositionInVector(i);
                     }
                 }
-                *ptrToPointFormingPoolSide = Point2f(x,y);
+                pool.movePoint(Point2f(x,y));
             } else if (editMode == "move all") {
                 mousePositionWhenClicked = Point2f(x,y);
             } else if (editMode == "reset points") {
-                eightPointsFormingPoolSides = {UNKNOWN_POINT, UNKNOWN_POINT, UNKNOWN_POINT, UNKNOWN_POINT, UNKNOWN_POINT, UNKNOWN_POINT, UNKNOWN_POINT, UNKNOWN_POINT};
+                pool.resetPoints();
                 editMode = "move points";
             }
         }
     }
     
     else if (event == EVENT_MOUSEMOVE && mouseClicking) {
+        
         if (!finishedInitializingPoolSides()) {
-            if (ptrToPointFormingPoolSide != nullptr) {
-                *ptrToPointFormingPoolSide = Point2f(x,y);
-            }
+            pool.movePoint(Point2f(x,y));
         }
         
         else if (finishedInitializingPoolSides()) {
             if (editMode == "move points") {
-                *ptrToPointFormingPoolSide = Point2f(x,y);
-                
+                pool.movePoint(Point2f(x,y));
             } else if (editMode == "move all") {
                 double xTranslation = double(x) - mousePositionWhenClicked.x;
                 double yTranslation = double(y) - mousePositionWhenClicked.y;
-                for (int i=0; i<8; i++) {
-                    eightPointsFormingPoolSides[i] += Point2f(xTranslation, yTranslation);
-                }
+                pool.moveAllPoints(xTranslation, yTranslation);
                 mousePositionWhenClicked = Point2f(x,y);
             }
         }
@@ -347,7 +344,8 @@ void getPoolCornersFromMouseInput( int event, int x, int y, int flags, void* use
 }
 
 bool finishedInitializingPoolSides() {
-    if (eightPointsFormingPoolSides.back() == UNKNOWN_POINT) {
+    //if (eightPointsFormingPoolSides.back() == UNKNOWN_POINT) {
+    if (pool.getPoints().size() < 9) {
         return false;
     } else {
         return true;
@@ -441,11 +439,12 @@ void drawFrameOfVideo(Mat frame) {
     Mat camMask = frame.clone();
     Mat camMaskPositive = Mat::zeros(frame.size(), frame.type());
     
+    vector<Point2f> poolSidePoints = pool.getPoints();
+    vector<Point2f> poolCorners = pool.getCorners();
     
-    for (int i=0; i<eightPointsFormingPoolSides.size(); i++) {
-        circle(camMaskPositive, eightPointsFormingPoolSides[i], 5, Scalar(100,100,100), FILLED);
+    for (int i=0; i<poolSidePoints.size(); i++) {
+        circle(camMaskPositive, poolSidePoints[i], 5, Scalar(100,100,100), FILLED);
     }
-    vector<Point2f> poolCorners = getPoolCornersFromPoolSidePoints();
     
     if (finishedInitializingPoolSides()) {
         for (int i=0; i<poolCorners.size(); i++) {
@@ -458,12 +457,12 @@ void drawFrameOfVideo(Mat frame) {
     rectangle(camMask, Point(0,frame.rows-50), Point(frame.cols,frame.rows), Scalar(0,0,0), FILLED);
     
     if (!finishedInitializingPoolSides()) {
-        int numberSidesRemaining = 0;
-        for (int i=0; i<eightPointsFormingPoolSides.size(); i++) {
-            if (eightPointsFormingPoolSides[i] == UNKNOWN_POINT) {
-                numberSidesRemaining++;
-            }
-        }
+        int numberSidesRemaining = 9-(int)pool.getPoints().size();
+        //for (int i=0; i<eightPointsFormingPoolSides.size(); i++) {
+        //    if (eightPointsFormingPoolSides[i] == UNKNOWN_POINT) {
+        //        numberSidesRemaining++;
+        //    }
+        //}
         putText(camMask, "Instructions: ", Point(frame.cols*4.0/10.0-70, frame.rows-25), FONT_HERSHEY_PLAIN, 1.5, Scalar(255,255,255), 2);
         putText(camMask, "Choose "+to_string(numberSidesRemaining)+" remaining sides of pool", Point(frame.cols*5.0/10.0-70,frame.rows-25), FONT_HERSHEY_PLAIN, 1.5, Scalar(0,0,255), 2);
     } else {
